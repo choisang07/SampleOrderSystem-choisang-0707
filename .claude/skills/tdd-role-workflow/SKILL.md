@@ -8,7 +8,7 @@ version: 0.2.0
 
 ## 개요
 
-이 프로젝트(SampleOrderSystem)의 Test / PoC / Develope / Review 역할은 문서가 아니라 실제 **Subagent**(`.claude/agents/test.md`, `poc.md`, `develope.md`, `review.md`)로 정의되어 있다 ([docs/role.md](../../../docs/role.md)). 이 스킬은 그 중 **test → develope → review → develope → test** 루프를 하나의 Phase 단위로, `Agent` 도구를 이용해 실제로 서로 다른 Subagent를 순차 호출하며 실행하기 위한 절차다. (poc Subagent는 이 루프와 별개로 호출한다.)
+이 프로젝트(SampleOrderSystem)의 Test / PoC / Develope / Review 역할은 문서가 아니라 실제 **Subagent**(`.claude/agents/TestCodeDeveloper.md`, `poc.md`, `develope.md`, `review.md`)로 정의되어 있다. (Test 역할의 Subagent 이름은 `"test"`가 시스템 예약어와 충돌해 `TestCodeDeveloper`를 사용한다.) ([docs/role.md](../../../docs/role.md)). 이 스킬은 그 중 **test → develope → review → develope → test** 루프를 하나의 Phase 단위로, `Agent` 도구를 이용해 실제로 서로 다른 Subagent를 순차 호출하며 실행하기 위한 절차다. (poc Subagent는 이 루프와 별개로 호출한다.)
 
 시작 전 항상 다음을 먼저 읽는다:
 - [docs/PLAN.md](../../../docs/PLAN.md) — Phase 0~5 정의와 전체 흐름
@@ -25,7 +25,7 @@ version: 0.2.0
 ### 0단계 — Phase 브랜치 준비 (`Agent(subagent_type: "develope")`)
 - docs/PLAN.md "Phase별 브랜치 전략"에 따라, 대상 Phase의 `phase/{N}-{slug}` 브랜치를 `master`에서 생성/체크아웃하도록 develope 에이전트에게 요청한다(이미 존재하면 체크아웃만). 이후 1~5단계의 모든 커밋은 이 브랜치에서 이뤄진다.
 
-### 1단계 — `Agent(subagent_type: "test")`
+### 1단계 — `Agent(subagent_type: "TestCodeDeveloper")`
 - 프롬프트에 포함할 것: 대상 Phase 범위, docs/requirement.md/docs/PRD.md의 관련 섹션, (Phase 3이면) 사례1/사례2 케이스 포함 지시.
 - 결과: 작성된 테스트케이스/테스트 파일 경로 목록.
 
@@ -40,7 +40,7 @@ version: 0.2.0
 ### 4단계 — `Agent(subagent_type: "develope")` (수정 반영)
 - 3단계에서 이상점이 있으면, 그 목록을 프롬프트에 그대로 넣어 반영을 요청한다. 이상점이 없으면 이 단계는 건너뛴다.
 
-### 5단계 — `Agent(subagent_type: "test")` (회귀 검증)
+### 5단계 — `Agent(subagent_type: "TestCodeDeveloper")` (회귀 검증)
 - 프롬프트에 포함할 것: 해당 Phase 테스트 + **이전에 완료된 모든 Phase**의 테스트를 함께 재확인해달라는 요청, 4단계에서 변경된 파일 목록.
 - 회귀 결과에 실패가 있으면 3~5단계를 반복한다.
 

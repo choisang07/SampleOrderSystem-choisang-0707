@@ -10,7 +10,7 @@
 - 아키텍처 설계(패키지 구조, 디자인 패턴, JSON 스키마): [docs/design.md](docs/design.md)
 - 콘솔 화면 예시(메뉴별 UI 기준): [docs/screens.md](docs/screens.md)
 - 진행 계획(Phase, 워크플로우): [docs/PLAN.md](docs/PLAN.md)
-- 역할 정의: [docs/role.md](docs/role.md) (개요), 실제 Subagent 정의는 [.claude/agents/](.claude/agents/) 하위 (test.md, poc.md, develope.md, review.md)
+- 역할 정의: [docs/role.md](docs/role.md) (개요), 실제 Subagent 정의는 [.claude/agents/](.claude/agents/) 하위 (TestCodeDeveloper.md, poc.md, develope.md, review.md)
 
 작업을 시작하기 전 항상 위 5개 문서(특히 docs/PLAN.md, docs/role.md)를 먼저 확인한다.
 
@@ -23,11 +23,11 @@
 - 본 프로젝트(SampleOrderSystem) 개발 시 MVC 구조/영속성 처리 코드는 위 PoC 결과물을 기반으로 이식/확장한다.
 
 ### 2. 역할 기반 TDD로 진행한다 (Subagent 기반)
-- 4가지 역할: **test / poc / develope / review**. 각각 실제 Claude Code Subagent로 정의되어 있다 ([.claude/agents/](.claude/agents/)). `Agent` 도구에서 `subagent_type: "test"`처럼 직접 호출한다.
-- test와 review Subagent는 Edit/Write(review는 Write도 없음)와 Bash가 없어 **코드나 PRD를 수정할 수 없다** — 시스템적으로 강제되는 제약이다. 발견한 사항은 결과 보고(review는 `ReportFindings`)로 develope에게 전달한다.
+- 4가지 역할: **test(Subagent 이름: `TestCodeDeveloper`) / poc / develope / review**. 각각 실제 Claude Code Subagent로 정의되어 있다 ([.claude/agents/](.claude/agents/)). `Agent` 도구에서 `subagent_type: "TestCodeDeveloper"`처럼 직접 호출한다 (`"test"`는 시스템 예약어와 충돌해 사용할 수 없다).
+- review Subagent는 Edit/Write(review는 Write도 없음)와 Bash가 없어 **코드나 PRD를 수정할 수 없다** — 시스템적으로 강제되는 제약이다. 발견한 사항은 결과 보고(review는 `ReportFindings`)로 develope에게 전달한다.
 - Phase별 진행 루프: `test(TestCase 작성) → develope(구현) → review(이상점 보고) → develope(반영) → test(회귀)`. 각 Agent 호출은 이전 대화를 모르므로 self-contained 프롬프트로 호출한다.
 - Phase 구성은 [docs/PLAN.md](docs/PLAN.md)의 Phase 0~5 표를 따른다 (시료 관리 → 주문 접수 → 승인/거절+생산라인 → 출고 → 모니터링 순).
-- 브랜치는 역할별이 아니라 **Phase별**로 나눈다(`phase/{N}-{slug}`, git 작업은 Bash를 가진 develope 에이전트만 수행). 회귀 통과 후 `master`로 PR을 생성/머지한다. 자세한 내용은 [docs/PLAN.md](docs/PLAN.md)의 "Phase별 브랜치 전략" 참고.
+- 브랜치는 역할별이 아니라 **Phase별**로 나눈다(`phase/{N}-{slug}`). Phase 브랜치 생성/PR은 develope 에이전트가 전담하되, TestCodeDeveloper도 Bash 권한이 있어 테스트 산출물(테스트케이스/테스트 코드) 커밋은 직접 수행할 수 있다. 회귀 통과 후 `master`로 PR을 생성/머지한다. 자세한 내용은 [docs/PLAN.md](docs/PLAN.md)의 "Phase별 브랜치 전략" 참고.
 - 이 흐름을 자동으로 오케스트레이션하려면 `/tdd-role-workflow` 스킬을 사용한다.
 
 ### 3. 핵심 비즈니스 규칙 (재고/생산)
@@ -37,7 +37,7 @@
 
 ### 4. 문서 최신화
 - 요구사항/아키텍처/계획/역할/화면에 변경이 생기면 docs/requirement.md, docs/PRD.md, docs/PLAN.md, docs/design.md, docs/role.md, docs/screens.md 중 해당 문서를 함께 갱신한다.
-- Review 결과는 `docs/reviews/`, Test 케이스는 test Subagent 정의([.claude/agents/test.md](.claude/agents/test.md))의 산출물 규칙을 따라 기록한다.
+- Review 결과는 `docs/reviews/`, Test 케이스는 TestCodeDeveloper Subagent 정의([.claude/agents/TestCodeDeveloper.md](.claude/agents/TestCodeDeveloper.md))의 산출물 규칙을 따라 기록한다.
 
 ### 5. 커밋 메시지 규칙
 - 커밋 메시지는 `[타입] 내용` 형식으로 작성한다 (예: `[feat] 시료 등록 기능 추가`).
