@@ -4,14 +4,13 @@
 #include <iostream>
 
 void ConsoleView::printMainMenu() const {
+    // docs/screens.md "메인 메뉴" 확정 6개 항목(design.md §7)에 맞춘 메뉴 구성.
     std::cout << "==============================\n";
     std::cout << " 반도체 시료 생산주문관리 시스템\n";
     std::cout << "==============================\n";
-    std::cout << "[1] 시료 관리\n";
-    std::cout << "[2] 주문 (접수/승인/거절)\n";
-    std::cout << "[3] 모니터링\n";
-    std::cout << "[4] 출고 처리\n";
-    std::cout << "[5] 생산 라인\n";
+    std::cout << "[1] 시료 관리       [2] 시료 주문\n";
+    std::cout << "[3] 주문 승인/거절  [4] 모니터링\n";
+    std::cout << "[5] 생산라인 조회   [6] 출고 처리\n";
     std::cout << "[0] 종료\n";
     std::cout << "선택 > ";
 }
@@ -61,4 +60,25 @@ void ConsoleView::printSampleList(const std::vector<Sample>& samples) const {
                    << sample.avgProductionTime << "\t" << sample.yield << "\t"
                    << sample.stock << "\n";
     }
+}
+
+void ConsoleView::printOrderMenuHeader() const {
+    std::cout << "__________________________________________________\n";
+    std::cout << "[2] 시료 주문\n";
+    std::cout << "__________________________________________________\n";
+}
+
+void ConsoleView::printOrderConfirmation(const std::string& sampleName, const std::string& sampleId,
+                                          const std::string& customerName, int quantity) const {
+    std::cout << "\n입력 내용 확인\n\n";
+    std::cout << "시료 " << sampleName << "    (" << sampleId << ")\n";
+    std::cout << "고객    " << customerName << "\n";
+    std::cout << "수량    " << quantity << " ea\n\n";
+    std::cout << "[Y] 예약 접수    [N] 취소\n";
+}
+
+void ConsoleView::printOrderReservationComplete(const std::string& orderId, const std::string& status) const {
+    std::cout << "\n예약 접수 완료.\n\n";
+    std::cout << "주문번호    " << orderId << "\n";
+    std::cout << "현재 상태 " << status << "\n";
 }
