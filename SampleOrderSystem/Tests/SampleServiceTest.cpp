@@ -9,6 +9,7 @@
 //       std::vector<Sample> search(const std::string& keyword) const;
 //       // keyword가 빈 문자열이면 std::invalid_argument throw (확정: 재입력 요구).
 //       // 매칭 규칙(확정): 이름(name) 대상, 부분 일치(contains), 대소문자 무시. ID는 대상 아님.
+//       // ID 채번 포맷(확정): S-{3자리 순번} (예: S-001).
 //   };
 // 실제 시그니처가 다르면 Develope 구현 후 tester가 이 파일을 갱신한다.
 
@@ -59,9 +60,9 @@ TEST(SampleServiceTest, RegisterSample_SavesWithAutoIdAndZeroStock) {
     SampleService service(repo);
     const Sample result = service.registerSample("WaferA", 2.0, 0.9);
 
-    EXPECT_EQ(result.id, "S1");
+    EXPECT_EQ(result.id, "S-001");
     EXPECT_EQ(result.stock, 0);
-    EXPECT_EQ(saved.id, "S1");
+    EXPECT_EQ(saved.id, "S-001");
     EXPECT_EQ(saved.name, "WaferA");
     EXPECT_EQ(saved.stock, 0);
 }
@@ -70,14 +71,14 @@ TEST(SampleServiceTest, RegisterSample_SavesWithAutoIdAndZeroStock) {
 TEST(SampleServiceTest, RegisterSample_AllowsDuplicateName) {
     NiceMock<MockSampleRepository> repo;
     ON_CALL(repo, findAll())
-        .WillByDefault(Return(std::vector<Sample>{MakeSample("S1", "WaferA")}));
+        .WillByDefault(Return(std::vector<Sample>{MakeSample("S-001", "WaferA")}));
 
     EXPECT_CALL(repo, save(_)).Times(1);
 
     SampleService service(repo);
     const Sample result = service.registerSample("WaferA", 3.0, 0.7);
 
-    EXPECT_EQ(result.id, "S2");
+    EXPECT_EQ(result.id, "S-002");
     EXPECT_EQ(result.name, "WaferA");
 }
 
@@ -110,28 +111,28 @@ TEST(SampleServiceTest, ListAll_ReturnsAllSamplesIncludingStock) {
     NiceMock<MockSampleRepository> repo;
     ON_CALL(repo, findAll())
         .WillByDefault(Return(std::vector<Sample>{
-            MakeSample("S1", "WaferA", /*stock=*/5),
-            MakeSample("S2", "WaferB", /*stock=*/0),
+            MakeSample("S-001", "WaferA", /*stock=*/5),
+            MakeSample("S-002", "WaferB", /*stock=*/0),
         }));
 
     SampleService service(repo);
     const auto result = service.listAll();
 
     ASSERT_EQ(result.size(), 2u);
-    EXPECT_THAT(IdsOf(result), UnorderedElementsAre("S1", "S2"));
+    EXPECT_THAT(IdsOf(result), UnorderedElementsAre("S-001", "S-002"));
 }
 
 // TC-P1-012: 등록 직후(stock=0)인 시료도 목록에서 제외되지 않는다.
 TEST(SampleServiceTest, ListAll_IncludesZeroStockSample) {
     NiceMock<MockSampleRepository> repo;
     ON_CALL(repo, findAll())
-        .WillByDefault(Return(std::vector<Sample>{MakeSample("S2", "WaferB", /*stock=*/0)}));
+        .WillByDefault(Return(std::vector<Sample>{MakeSample("S-002", "WaferB", /*stock=*/0)}));
 
     SampleService service(repo);
     const auto result = service.listAll();
 
     ASSERT_EQ(result.size(), 1u);
-    EXPECT_EQ(result[0].id, "S2");
+    EXPECT_EQ(result[0].id, "S-002");
     EXPECT_EQ(result[0].stock, 0);
 }
 
@@ -144,8 +145,8 @@ protected:
     void SetUp() override {
         ON_CALL(repo, findAll())
             .WillByDefault(Return(std::vector<Sample>{
-                MakeSample("S1", "WaferA"),
-                MakeSample("S2", "WaferB"),
+                MakeSample("S-001", "WaferA"),
+                MakeSample("S-002", "WaferB"),
             }));
     }
 };
@@ -157,16 +158,16 @@ TEST_F(SampleServiceSearchTest, FindsExactNameMatch) {
     const auto result = service.search("WaferA");
 
     ASSERT_EQ(result.size(), 1u);
-    EXPECT_EQ(result[0].id, "S1");
+    EXPECT_EQ(result[0].id, "S-001");
 }
 
-// TC-P1-021 (확정: 부분 일치): "Wafer"로 검색하면 S1, S2 모두 반환.
+// TC-P1-021 (확정: 부분 일치): "Wafer"로 검색하면 S-001, S-002 모두 반환.
 TEST_F(SampleServiceSearchTest, PartialMatch_ReturnsAllContainingSubstring) {
     SampleService service(repo);
 
     const auto result = service.search("Wafer");
 
-    EXPECT_THAT(IdsOf(result), UnorderedElementsAre("S1", "S2"));
+    EXPECT_THAT(IdsOf(result), UnorderedElementsAre("S-001", "S-002"));
 }
 
 // TC-P1-022 (확정: 대소문자 무시): 소문자 검색어로도 매칭.
@@ -176,7 +177,7 @@ TEST_F(SampleServiceSearchTest, CaseInsensitiveMatch) {
     const auto result = service.search("wafera");
 
     ASSERT_EQ(result.size(), 1u);
-    EXPECT_EQ(result[0].id, "S1");
+    EXPECT_EQ(result[0].id, "S-001");
 }
 
 // TC-P1-023 (확정: 재입력 요구): 빈 검색어는 예외를 던진다(검색 실행 안 함).
@@ -197,5 +198,5 @@ TEST_F(SampleServiceSearchTest, NoMatch_ReturnsEmpty) {
 TEST_F(SampleServiceSearchTest, SearchById_ReturnsEmpty_BecauseNameOnly) {
     SampleService service(repo);
 
-    EXPECT_TRUE(service.search("S1").empty());
+    EXPECT_TRUE(service.search("S-001").empty());
 }

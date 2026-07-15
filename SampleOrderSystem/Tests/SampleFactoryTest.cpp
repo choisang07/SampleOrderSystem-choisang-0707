@@ -6,7 +6,8 @@
 //       static Sample create(const std::string& name, double avgProductionTime, double yield,
 //                             const ISampleRepository& repo);
 //       // 유효성 위반 시 std::invalid_argument throw.
-//       // id는 repo.findAll()의 기존 ID(S{n}) 중 최댓값 + 1로 자동 채번(확정: docs_temp/Phase1/abnormal.md 1번).
+//       // id는 repo.findAll()의 기존 ID(S-{3자리 순번}) 중 최댓값 + 1로 자동 채번, 3자리 0패딩
+//       // (확정: docs_temp/Phase1/abnormal.md 1번 — design.md §5/§8, screens.md 200행 기준).
 //   };
 // 실제 시그니처가 다르면 Develope 구현 후 tester가 이 파일을 갱신한다.
 
@@ -33,33 +34,33 @@ Sample MakeSample(const std::string& id, const std::string& name) {
 
 }  // namespace
 
-// TC-P1-001 / TC-P1-002b: 저장소가 비어 있으면 최초 ID는 "S1".
+// TC-P1-001 / TC-P1-002b: 저장소가 비어 있으면 최초 ID는 "S-001".
 TEST(SampleFactoryTest, AssignsFirstIdWhenRepositoryEmpty) {
     NiceMock<MockSampleRepository> repo;
     ON_CALL(repo, findAll()).WillByDefault(Return(std::vector<Sample>{}));
 
     const Sample sample = SampleFactory::create("WaferA", 2.0, 0.9, repo);
 
-    EXPECT_EQ(sample.id, "S1");
+    EXPECT_EQ(sample.id, "S-001");
     EXPECT_EQ(sample.name, "WaferA");
     EXPECT_DOUBLE_EQ(sample.avgProductionTime, 2.0);
     EXPECT_DOUBLE_EQ(sample.yield, 0.9);
     EXPECT_EQ(sample.stock, 0);  // 확정: 등록 입력값에 stock 없음, 항상 0으로 초기화.
 }
 
-// TC-P1-002b: 기존에 S1~S3이 있으면 다음 ID는 "S4"(최댓값+1).
+// TC-P1-002b: 기존에 S-001~S-003이 있으면 다음 ID는 "S-004"(순번 최댓값+1, 3자리 0패딩).
 TEST(SampleFactoryTest, AssignsNextIncrementedId) {
     NiceMock<MockSampleRepository> repo;
     ON_CALL(repo, findAll())
         .WillByDefault(Return(std::vector<Sample>{
-            MakeSample("S1", "WaferA"),
-            MakeSample("S2", "WaferB"),
-            MakeSample("S3", "WaferC"),
+            MakeSample("S-001", "WaferA"),
+            MakeSample("S-002", "WaferB"),
+            MakeSample("S-003", "WaferC"),
         }));
 
     const Sample sample = SampleFactory::create("WaferD", 1.0, 0.8, repo);
 
-    EXPECT_EQ(sample.id, "S4");
+    EXPECT_EQ(sample.id, "S-004");
 }
 
 // TC-P1-003: 이름이 빈 문자열이면 거부.
@@ -132,10 +133,10 @@ TEST(SampleFactoryTest, RejectsYieldAboveOne) {
 TEST(SampleFactoryTest, AllowsDuplicateName) {
     NiceMock<MockSampleRepository> repo;
     ON_CALL(repo, findAll())
-        .WillByDefault(Return(std::vector<Sample>{MakeSample("S1", "WaferA")}));
+        .WillByDefault(Return(std::vector<Sample>{MakeSample("S-001", "WaferA")}));
 
     const Sample sample = SampleFactory::create("WaferA", 3.0, 0.7, repo);
 
-    EXPECT_EQ(sample.id, "S2");
+    EXPECT_EQ(sample.id, "S-002");
     EXPECT_EQ(sample.name, "WaferA");
 }
