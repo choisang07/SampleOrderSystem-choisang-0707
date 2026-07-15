@@ -1,10 +1,34 @@
 #include "MainController.h"
 
+#include <chrono>
+#include <ctime>
+#include <iomanip>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 
 #include "../Model/Order.h"
 #include "../Service/OrderService.h"
+#include "../Service/ReleaseService.h"
+
+namespace {
+
+// "YYYY-MM-DD HH:MM:SS" 형식의 현재 시각 문자열(design.md §5 createdAt 포맷과 동일).
+std::string currentTimestamp() {
+    const auto now = std::chrono::system_clock::now();
+    const std::time_t nowTime = std::chrono::system_clock::to_time_t(now);
+    std::tm localTm{};
+#ifdef _WIN32
+    localtime_s(&localTm, &nowTime);
+#else
+    localtime_r(&nowTime, &localTm);
+#endif
+    std::ostringstream oss;
+    oss << std::put_time(&localTm, "%Y-%m-%d %H:%M:%S");
+    return oss.str();
+}
+
+}  // namespace
 
 MainController::MainController(bool dataLoadFailed,
                                  ISampleRepository& sampleRepo,
@@ -222,8 +246,45 @@ void MainController::handleMonitoring() {
 }
 
 void MainController::handleRelease() {
-    // TODO(Phase 4): ReleaseService를 통한 출고 처리 메뉴 구현.
-    view_.printMessage("[출고 처리] 기능은 Phase 4에서 구현됩니다.");
+    ReleaseService service(orderRepo_);
+
+    view_.printReleaseMenu();
+
+    const auto releasable = service.listReleasable();
+    if (releasable.empty()) {
+        view_.printMessage("출고 가능한 주문이 없습니다.");
+        return;
+    }
+
+    view_.printReleasableOrderList(releasable);
+    const std::string input = view_.promptLine("출고할 번호 > ");
+    if (!view_.isInputAlive()) {
+        return;
+    }
+
+    int index = 0;
+    try {
+        size_t pos = 0;
+        index = std::stoi(input, &pos);
+        if (pos != input.size()) {
+            throw std::invalid_argument("trailing characters");
+        }
+    } catch (const std::exception&) {
+        view_.printMessage("잘못된 입력입니다.");
+        return;
+    }
+
+    if (index < 1 || static_cast<size_t>(index) > releasable.size()) {
+        view_.printMessage("잘못된 입력입니다.");
+        return;
+    }
+
+    try {
+        const Order released = service.release(releasable[static_cast<size_t>(index - 1)].id);
+        view_.printReleaseComplete(released, currentTimestamp());
+    } catch (const std::invalid_argument& e) {
+        view_.printMessage(e.what());
+    }
 }
 
 void MainController::handleProductionLine() {
