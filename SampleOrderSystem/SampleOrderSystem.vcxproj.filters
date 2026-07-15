@@ -15,11 +15,90 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <Filter Include="Model">
+      <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-000000000001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Persistence">
+      <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-000000000002}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Repository">
+      <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-000000000003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controller">
+      <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-000000000004}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View">
+      <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-000000000005}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor">
+      <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-000000000006}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Persistence\JsonFileStore.cpp">
+      <Filter>Persistence</Filter>
+    </ClCompile>
+    <ClCompile Include="Repository\JsonSampleRepository.cpp">
+      <Filter>Repository</Filter>
+    </ClCompile>
+    <ClCompile Include="Repository\JsonOrderRepository.cpp">
+      <Filter>Repository</Filter>
+    </ClCompile>
+    <ClCompile Include="Repository\JsonProductionQueueRepository.cpp">
+      <Filter>Repository</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller\MainController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="View\ConsoleView.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="vendor\nlohmann\json.hpp">
+      <Filter>vendor</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Sample.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Order.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ProductionQueueEntry.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Persistence\JsonFileStore.h">
+      <Filter>Persistence</Filter>
+    </ClInclude>
+    <ClInclude Include="Repository\ISampleRepository.h">
+      <Filter>Repository</Filter>
+    </ClInclude>
+    <ClInclude Include="Repository\IOrderRepository.h">
+      <Filter>Repository</Filter>
+    </ClInclude>
+    <ClInclude Include="Repository\IProductionQueueRepository.h">
+      <Filter>Repository</Filter>
+    </ClInclude>
+    <ClInclude Include="Repository\JsonSampleRepository.h">
+      <Filter>Repository</Filter>
+    </ClInclude>
+    <ClInclude Include="Repository\JsonOrderRepository.h">
+      <Filter>Repository</Filter>
+    </ClInclude>
+    <ClInclude Include="Repository\JsonProductionQueueRepository.h">
+      <Filter>Repository</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller\MainController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="View\ConsoleView.h">
+      <Filter>View</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
