@@ -30,9 +30,9 @@ powershell -ExecutionPolicy Bypass -File .claude/skills/system-test/run.ps1
 ```
 
 스크립트가 하는 일:
-1. MSBuild로 `Project17.slnx`를 `Release|x64` 구성으로 1회 빌드한다. 빌드가 실패하면 그 자리에서
+1. MSBuild로 `SampleOrderSystem.slnx`를 `Release|x64` 구성으로 1회 빌드한다. 빌드가 실패하면 그 자리에서
    중단하고 케이스를 실행하지 않는다(exit code 0이 아니면 실패로 간주).
-2. 스크립트 안의 `$cases` 배열에 정의된 각 케이스를 이미 빌드된 `x64/Release/Project17.exe`에
+2. 스크립트 안의 `$cases` 배열에 정의된 각 케이스를 이미 빌드된 `x64/Release/SampleOrderSystem.exe`에
    콘솔 입력(줄 단위)으로 그대로 넣어 실행하고 출력을 캡처한다. `InputLines`가 여러 줄이면 실제
    콘솔에서 한 줄씩 Enter를 치는 것과 동일하게 순서대로 입력한다.
 3. 캡처된 출력에서 빈 줄을 제거한 뒤 `Expect`와 비교해 PASS/FAIL을 표로 출력한다.

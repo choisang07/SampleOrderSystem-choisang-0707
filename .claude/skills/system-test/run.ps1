@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-  SampleOrderSystem(Project17) 콘솔 앱을 Release|x64로 1회 빌드하고,
+  SampleOrderSystem 콘솔 앱을 Release|x64로 1회 빌드하고,
   $cases에 누적된 콘솔 입출력 회귀 케이스를 그 빌드에 대해 일괄 실행/비교한다.
 
 .PARAMETER SkipBuild
@@ -12,8 +12,8 @@ param(
 
 $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
-$solution = Join-Path $repoRoot "Project17.slnx"
-$exePath  = Join-Path $repoRoot "x64\Release\Project17.exe"
+$solution = Join-Path $repoRoot "SampleOrderSystem.slnx"
+$exePath  = Join-Path $repoRoot "x64\Release\SampleOrderSystem.exe"
 
 # ---------------------------------------------------------------------------
 # 회귀 케이스 목록 — test 에이전트가 Phase별 TestCase 작성/회귀 시 이 배열에

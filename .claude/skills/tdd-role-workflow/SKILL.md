@@ -1,6 +1,6 @@
 ---
 name: TDD Role Workflow
-description: Use this skill when developing a Phase of the SampleOrderSystem (Project17) project, or when the user says things like "Phase N 진행해줘", "이 기능 TDD로 개발해줘", "Test/Develope/Review 루프 돌려줘". Orchestrates the test/develope/review subagents (.claude/agents/) in the loop defined in docs/PLAN.md and docs/role.md.
+description: Use this skill when developing a Phase of the SampleOrderSystem project, or when the user says things like "Phase N 진행해줘", "이 기능 TDD로 개발해줘", "Test/Develope/Review 루프 돌려줘". Orchestrates the test/develope/review subagents (.claude/agents/) in the loop defined in docs/PLAN.md and docs/role.md.
 version: 0.2.0
 ---
 
