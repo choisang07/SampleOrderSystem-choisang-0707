@@ -35,7 +35,7 @@
 - 재고 확인 시 생산 큐는 절대 고려하지 않는다 (다른 주문이 예정한 미래 생산분은 무시). 자세한 근거는 [docs/requirement.md](docs/requirement.md) 5.6절 사례1/사례2 참고.
 
 ### 4. 문서 최신화
-- 요구사항/아키텍처/계획에 변경이 생기면 docs/requirement.md, docs/PRD.md, docs/PLAN.md 중 해당 문서를 함께 갱신한다.
+- 요구사항/아키텍처/계획/역할에 변경이 생기면 docs/requirement.md, docs/PRD.md, docs/PLAN.md, docs/design.md, docs/role.md 중 해당 문서를 함께 갱신한다.
 - Review 결과는 `docs/reviews/`, Test 케이스는 test Subagent 정의([.claude/agents/test.md](.claude/agents/test.md))의 산출물 규칙을 따라 기록한다.
 
 ### 5. 커밋 메시지 규칙
