@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   SampleOrderSystem(Project17) 콘솔 앱을 Release|x64로 1회 빌드하고,
   $cases에 누적된 콘솔 입출력 회귀 케이스를 그 빌드에 대해 일괄 실행/비교한다.

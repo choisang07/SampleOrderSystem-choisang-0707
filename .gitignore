@@ -9,3 +9,5 @@ Release/
 *.ilk
 *.exe
 Project.pdf
+packages/
+.claude/scheduled_tasks.lock
