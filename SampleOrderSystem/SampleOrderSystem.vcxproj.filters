@@ -77,13 +77,25 @@
     <ClCompile Include="Domain\Factory\SampleFactory.cpp">
       <Filter>Domain\Factory</Filter>
     </ClCompile>
+    <ClCompile Include="Domain\Factory\OrderFactory.cpp">
+      <Filter>Domain\Factory</Filter>
+    </ClCompile>
     <ClCompile Include="Service\SampleService.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\OrderService.cpp">
       <Filter>Service</Filter>
     </ClCompile>
     <ClCompile Include="Tests\SampleFactoryTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
     <ClCompile Include="Tests\SampleServiceTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\OrderFactoryTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\OrderServiceTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
   </ItemGroup>
@@ -130,10 +142,19 @@
     <ClInclude Include="Domain\Factory\SampleFactory.h">
       <Filter>Domain\Factory</Filter>
     </ClInclude>
+    <ClInclude Include="Domain\Factory\OrderFactory.h">
+      <Filter>Domain\Factory</Filter>
+    </ClInclude>
     <ClInclude Include="Service\SampleService.h">
       <Filter>Service</Filter>
     </ClInclude>
+    <ClInclude Include="Service\OrderService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
     <ClInclude Include="Tests\Mocks\MockSampleRepository.h">
+      <Filter>Tests\Mocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\Mocks\MockOrderRepository.h">
       <Filter>Tests\Mocks</Filter>
     </ClInclude>
   </ItemGroup>

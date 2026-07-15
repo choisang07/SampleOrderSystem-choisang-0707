@@ -3,6 +3,9 @@
 #include <stdexcept>
 #include <string>
 
+#include "../Model/Order.h"
+#include "../Service/OrderService.h"
+
 MainController::MainController(bool dataLoadFailed,
                                  ISampleRepository& sampleRepo,
                                  IOrderRepository& orderRepo,
@@ -36,11 +39,13 @@ void MainController::run() {
         } else if (command == "2") {
             handleOrder();
         } else if (command == "3") {
-            handleMonitoring();
+            handleApprovalRejection();
         } else if (command == "4") {
-            handleRelease();
+            handleMonitoring();
         } else if (command == "5") {
             handleProductionLine();
+        } else if (command == "6") {
+            handleRelease();
         } else if (command == "0") {
             running = false;
         } else {
@@ -150,8 +155,65 @@ void MainController::handleSampleSearch(SampleService& service) {
 }
 
 void MainController::handleOrder() {
-    // TODO(Phase 2~3): OrderService/ProductionService를 통한 접수/승인/거절 메뉴 구현.
-    view_.printMessage("[주문 (접수/승인/거절)] 기능은 Phase 2~3에서 구현됩니다.");
+    // [2] 시료 주문(예약 접수) — docs/screens.md "[2] 시료 주문" 흐름.
+    // 재고 확인/차감은 절대 하지 않는다(Phase 3 OrderService::approve의 책임, CLAUDE.md 3절).
+    view_.printOrderMenuHeader();
+
+    const std::string sampleId = view_.promptLine("시료 ID > ");
+    if (!view_.isInputAlive()) {
+        return;
+    }
+    const std::string customerName = view_.promptLine("고객명 > ");
+    if (!view_.isInputAlive()) {
+        return;
+    }
+    const std::string quantityInput = view_.promptLine("주문 수량 > ");
+    if (!view_.isInputAlive()) {
+        return;
+    }
+
+    int quantity = 0;
+    try {
+        size_t pos = 0;
+        quantity = std::stoi(quantityInput, &pos);
+        if (pos != quantityInput.size()) {
+            throw std::invalid_argument("trailing characters");
+        }
+    } catch (const std::exception&) {
+        view_.printMessage("숫자를 입력하세요.");
+        return;
+    }
+
+    SampleService sampleService(sampleRepo_);
+    const auto sampleOpt = sampleService.findById(sampleId);
+    if (!sampleOpt.has_value()) {
+        view_.printMessage("등록되지 않은 시료입니다.");
+        return;
+    }
+
+    view_.printOrderConfirmation(sampleOpt->name, sampleOpt->id, customerName, quantity);
+    const std::string confirm = view_.promptLine("선택 > ");
+    if (!view_.isInputAlive()) {
+        return;
+    }
+
+    if (confirm != "Y" && confirm != "y") {
+        view_.printMessage("예약이 취소되었습니다.");
+        return;
+    }
+
+    OrderService service(orderRepo_, sampleRepo_);
+    try {
+        const Order order = service.reserve(sampleId, customerName, quantity);
+        view_.printOrderReservationComplete(order.id, toString(order.status));
+    } catch (const std::invalid_argument& e) {
+        view_.printMessage(e.what());
+    }
+}
+
+void MainController::handleApprovalRejection() {
+    // TODO(Phase 3): OrderService::approve/reject, ProductionService 연동한 승인/거절 메뉴 구현.
+    view_.printMessage("[주문 승인/거절] 기능은 Phase 3에서 구현됩니다.");
 }
 
 void MainController::handleMonitoring() {

@@ -28,4 +28,14 @@ public:
 
     // 시료 목록(등록/조회/검색 결과 공용)을 표 형태로 출력한다.
     void printSampleList(const std::vector<Sample>& samples) const;
+
+    // [2] 시료 주문 메뉴 헤더(docs/screens.md 기준).
+    void printOrderMenuHeader() const;
+
+    // 입력 내용 확인 화면(시료명/시료ID/고객명/수량) + [Y]/[N] 안내 출력.
+    void printOrderConfirmation(const std::string& sampleName, const std::string& sampleId,
+                                const std::string& customerName, int quantity) const;
+
+    // 예약 접수 완료 화면(주문번호/현재 상태) 출력.
+    void printOrderReservationComplete(const std::string& orderId, const std::string& status) const;
 };

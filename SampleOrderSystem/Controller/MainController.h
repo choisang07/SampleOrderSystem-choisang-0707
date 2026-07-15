@@ -28,6 +28,7 @@ private:
     void handleSampleList(SampleService& service);
     void handleSampleSearch(SampleService& service);
     void handleOrder();
+    void handleApprovalRejection();
     void handleMonitoring();
     void handleRelease();
     void handleProductionLine();
