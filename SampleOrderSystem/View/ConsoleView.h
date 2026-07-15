@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <optional>
 #include <string>
 #include <vector>
@@ -7,6 +8,7 @@
 #include "../Model/Order.h"
 #include "../Model/ProductionQueueEntry.h"
 #include "../Model/Sample.h"
+#include "../Service/MonitorService.h"
 
 // 생산 라인 조회 화면 전용 표시용 DTO(View 전담, design.md §4.3의 ProductionQueueEntry를
 // 화면에 필요한 부가 정보(시료명, 진행률/완료예정)와 함께 보여주기 위한 것으로 로직은 없다.
@@ -35,9 +37,13 @@ struct ReservedOrderView {
 };
 
 // 콘솔 출력/입력만 전담한다. 로직은 없다(ConsoleMVC PoC 원칙 유지, design.md §3).
+// 모니터링 관련 출력은 MonitorService가 계산해 넘겨준 DTO(MonitoringSummary,
+// SampleInventoryStatus)를 그대로 표시할 뿐, 집계 로직은 갖지 않는다.
 class ConsoleView {
 public:
-    void printMainMenu() const;
+    // 메인 메뉴 상단 요약 정보(requirement.md 5.1절, docs/screens.md 메인 메뉴)를
+    // Controller가 MonitorService로부터 얻어 전달한다.
+    void printMainMenu(const MonitoringSummary& summary) const;
     void printMessage(const std::string& message) const;
     void printDataLoadFailureBanner() const;
 
@@ -90,4 +96,14 @@ public:
     void printProductionLineMenu() const;
     void printProductionLineActive(const ProductionLineActiveView& active) const;
     void printProductionLineWaiting(const std::vector<ProductionLineWaitingView>& waiting) const;
+
+    // [4] 모니터링 하위 메뉴(주문량 확인/재고량 확인/뒤로가기) 출력(docs/screens.md 기준).
+    void printMonitoringMenu() const;
+
+    // 상태별 주문 현황(requirement.md 5.5절 "주문량 확인"). REJECTED는 애초에 맵에
+    // 담기지 않으므로(design.md §8) 화면에도 표시되지 않는다.
+    void printOrderStatusSummary(const std::map<OrderStatus, int>& counts) const;
+
+    // 시료별 재고 현황(requirement.md 5.5절 "재고량 확인").
+    void printInventoryStatus(const std::vector<SampleInventoryStatus>& items) const;
 };

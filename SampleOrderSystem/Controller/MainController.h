@@ -3,6 +3,7 @@
 #include "../Repository/IOrderRepository.h"
 #include "../Repository/IProductionQueueRepository.h"
 #include "../Repository/ISampleRepository.h"
+#include "../Service/MonitorService.h"
 #include "../Service/SampleService.h"
 #include "../View/ConsoleView.h"
 
@@ -30,6 +31,8 @@ private:
     void handleOrder();
     void handleApprovalRejection();
     void handleMonitoring();
+    void handleOrderVolumeCheck();
+    void handleInventoryCheck();
     void handleRelease();
     void handleProductionLine();
 
@@ -38,4 +41,5 @@ private:
     IOrderRepository& orderRepo_;
     IProductionQueueRepository& productionQueueRepo_;
     ConsoleView& view_;
+    MonitorService monitorService_;
 };
