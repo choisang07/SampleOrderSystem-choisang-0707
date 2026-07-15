@@ -49,10 +49,6 @@ std::vector<Sample> SampleService::search(const std::string& keyword) const {
     return result;
 }
 
-std::optional<Sample> SampleService::findById(const std::string& id) const {
-    return repo_.findById(id);
-}
-
 void SampleService::adjustStock(const std::string& id, int delta) {
     auto sampleOpt = repo_.findById(id);
     if (!sampleOpt) {

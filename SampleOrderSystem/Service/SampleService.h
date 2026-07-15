@@ -28,9 +28,6 @@ public:
     // keyword가 빈 문자열이면 std::invalid_argument를 던진다(재입력 요구, 확정 사항).
     std::vector<Sample> search(const std::string& keyword) const;
 
-    // 단건 조회(Phase 3 확장, abnormal.md 4번). 없으면 std::nullopt.
-    std::optional<Sample> findById(const std::string& id) const;
-
     // 재고 증감(Phase 3 확장). delta<0(차감)/delta>0(가산) 모두 허용한다.
     // 대상 시료가 없으면 std::invalid_argument, 차감 후 재고가 음수가 되면
     // std::invalid_argument를 던진다(재고 정합성 보호).
