@@ -187,6 +187,14 @@ TEST_F(SampleServiceSearchTest, EmptyKeyword_Throws) {
     EXPECT_THROW(service.search(""), std::invalid_argument);
 }
 
+// TC-P1-023 (확정: 재입력 요구): 공백만으로 이루어진 검색어도 빈 검색어로 간주해 예외를 던진다
+// (SampleFactory::create의 이름 검증과 동일한 기준으로 통일).
+TEST_F(SampleServiceSearchTest, BlankKeyword_Throws) {
+    SampleService service(repo);
+
+    EXPECT_THROW(service.search(" "), std::invalid_argument);
+}
+
 // TC-P1-024: 존재하지 않는 이름으로 검색하면 빈 목록.
 TEST_F(SampleServiceSearchTest, NoMatch_ReturnsEmpty) {
     SampleService service(repo);

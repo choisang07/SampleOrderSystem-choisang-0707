@@ -31,7 +31,7 @@ std::vector<Sample> SampleService::listAll() const {
 }
 
 std::vector<Sample> SampleService::search(const std::string& keyword) const {
-    if (keyword.empty()) {
+    if (keyword.empty() || SampleFactory::isBlank(keyword)) {
         throw std::invalid_argument("검색어를 입력하세요.");
     }
 

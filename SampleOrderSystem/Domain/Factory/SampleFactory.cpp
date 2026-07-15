@@ -6,13 +6,9 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace {
-
-bool isBlank(const std::string& s) {
+bool SampleFactory::isBlank(const std::string& s) {
     return std::all_of(s.begin(), s.end(), [](unsigned char c) { return std::isspace(c); });
 }
-
-}  // namespace
 
 Sample SampleFactory::create(const std::string& name, double avgProductionTime, double yield,
                               const ISampleRepository& repo) {

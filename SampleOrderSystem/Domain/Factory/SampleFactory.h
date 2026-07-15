@@ -15,6 +15,11 @@ public:
     static Sample create(const std::string& name, double avgProductionTime, double yield,
                           const ISampleRepository& repo);
 
+    // 문자열이 비어있거나 공백 문자로만 이루어졌는지 판정한다.
+    // 이름 검증(create)과 검색어 검증(SampleService::search)이 동일한 "필수 입력" 기준을
+    // 공유하도록 공개 유틸로 제공한다.
+    static bool isBlank(const std::string& s);
+
 private:
     static std::string nextId(const ISampleRepository& repo);
 };
