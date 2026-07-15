@@ -31,6 +31,11 @@ public:
     bool isCorrupted() const;
 
 private:
+    // 파일을 열고 파싱을 시도한다. fileExists는 파일이 존재해 열렸는지,
+    // parsedOk는 파싱에 성공했는지를 각각 담는다(파일이 없으면 fileExists=false,
+    // parsedOk=false). loadRoot()/isCorrupted()가 이 헬퍼 하나만 공유하므로
+    // 파일을 두 번 여는 일이 없다.
+    nlohmann::json tryLoadRoot(bool& fileExists, bool& parsedOk) const;
     nlohmann::json loadRoot() const;
     void saveRoot(const nlohmann::json& root) const;
 

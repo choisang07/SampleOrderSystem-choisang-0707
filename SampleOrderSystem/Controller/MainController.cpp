@@ -1,11 +1,11 @@
 #include "MainController.h"
 
-MainController::MainController(JsonFileStore& store,
+MainController::MainController(bool dataLoadFailed,
                                  ISampleRepository& sampleRepo,
                                  IOrderRepository& orderRepo,
                                  IProductionQueueRepository& productionQueueRepo,
                                  ConsoleView& view)
-    : store_(store),
+    : dataLoadFailed_(dataLoadFailed),
       sampleRepo_(sampleRepo),
       orderRepo_(orderRepo),
       productionQueueRepo_(productionQueueRepo),
@@ -13,7 +13,7 @@ MainController::MainController(JsonFileStore& store,
 }
 
 void MainController::run() {
-    if (store_.isCorrupted()) {
+    if (dataLoadFailed_) {
         // design.md §8 이슈 반영: 로드 실패를 무언으로 넘기지 않고 배너로 알린다.
         view_.printDataLoadFailureBanner();
     }

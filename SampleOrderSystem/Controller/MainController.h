@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../Persistence/JsonFileStore.h"
 #include "../Repository/IOrderRepository.h"
 #include "../Repository/IProductionQueueRepository.h"
 #include "../Repository/ISampleRepository.h"
@@ -10,9 +9,11 @@
 // 실제 시료/주문/모니터링/출고/생산 기능은 Phase 1~5에서 각 Service 계층과
 // 연동하며 채워진다(Controller는 Service를 통해서만 데이터를 조작한다는
 // ConsoleMVC PoC 원칙을 계승한다).
+// Controller는 Persistence 구체 클래스(JsonFileStore)를 알지 못한다(DIP, design.md §3, §8).
+// 데이터 파일 로드 성공 여부는 main.cpp가 확인해 bool 하나로만 전달받는다.
 class MainController {
 public:
-    MainController(JsonFileStore& store,
+    MainController(bool dataLoadFailed,
                     ISampleRepository& sampleRepo,
                     IOrderRepository& orderRepo,
                     IProductionQueueRepository& productionQueueRepo,
@@ -27,7 +28,7 @@ private:
     void handleRelease();
     void handleProductionLine();
 
-    JsonFileStore& store_;
+    bool dataLoadFailed_;
     ISampleRepository& sampleRepo_;
     IOrderRepository& orderRepo_;
     IProductionQueueRepository& productionQueueRepo_;

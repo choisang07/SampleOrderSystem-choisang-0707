@@ -31,12 +31,13 @@ int main() {
 
 	// 구체 클래스를 아는 곳은 이 main.cpp 한 곳뿐이다(design.md §3, §4.2 DIP).
 	JsonFileStore store("data/store.json");
+	const bool dataLoadFailed = store.isCorrupted();
 	JsonSampleRepository sampleRepo(store);
 	JsonOrderRepository orderRepo(store);
 	JsonProductionQueueRepository productionQueueRepo(store);
 	ConsoleView view;
 
-	MainController controller(store, sampleRepo, orderRepo, productionQueueRepo, view);
+	MainController controller(dataLoadFailed, sampleRepo, orderRepo, productionQueueRepo, view);
 	controller.run();
 
 	return 0;

@@ -7,10 +7,12 @@
 JsonFileStore::JsonFileStore(std::string filePath) : filePath_(std::move(filePath)) {
 }
 
-nlohmann::json JsonFileStore::loadRoot() const {
+nlohmann::json JsonFileStore::tryLoadRoot(bool& fileExists, bool& parsedOk) const {
     std::ifstream in(filePath_);
-    if (!in.is_open()) {
+    fileExists = in.is_open();
+    if (!fileExists) {
         // 파일이 아직 없으면(최초 실행) 빈 문서로 시작한다.
+        parsedOk = false;
         return nlohmann::json::object();
     }
 
@@ -20,9 +22,17 @@ nlohmann::json JsonFileStore::loadRoot() const {
     } catch (const nlohmann::json::parse_error&) {
         // 손상된 파일은 무시하고 빈 문서로 시작한다. isCorrupted()로 이 상황을
         // 별도로 확인할 수 있다(§8 이슈 반영).
+        parsedOk = false;
         return nlohmann::json::object();
     }
+    parsedOk = true;
     return root;
+}
+
+nlohmann::json JsonFileStore::loadRoot() const {
+    bool fileExists = false;
+    bool parsedOk = false;
+    return tryLoadRoot(fileExists, parsedOk);
 }
 
 void JsonFileStore::saveRoot(const nlohmann::json& root) const {
@@ -31,18 +41,11 @@ void JsonFileStore::saveRoot(const nlohmann::json& root) const {
 }
 
 bool JsonFileStore::isCorrupted() const {
-    std::ifstream in(filePath_);
-    if (!in.is_open()) {
-        return false; // 파일이 없는 것은 손상이 아니다.
-    }
-
-    nlohmann::json root;
-    try {
-        in >> root;
-    } catch (const nlohmann::json::parse_error&) {
-        return true;
-    }
-    return false;
+    bool fileExists = false;
+    bool parsedOk = false;
+    tryLoadRoot(fileExists, parsedOk);
+    // 파일이 없는 것은 손상이 아니다. 파일이 있는데 파싱에 실패한 경우만 손상이다.
+    return fileExists && !parsedOk;
 }
 
 std::vector<Sample> JsonFileStore::loadSamples() const {
