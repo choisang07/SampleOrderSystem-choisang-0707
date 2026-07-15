@@ -3,11 +3,13 @@
 #include <iomanip>
 #include <iostream>
 
-void ConsoleView::printMainMenu() const {
+void ConsoleView::printMainMenu(const MonitoringSummary& summary) const {
     // docs/screens.md "메인 메뉴" 확정 6개 항목(design.md §7)에 맞춘 메뉴 구성.
     std::cout << "==============================\n";
     std::cout << " 반도체 시료 생산주문관리 시스템\n";
     std::cout << "==============================\n";
+    std::cout << "등록 시료 " << summary.sampleCount << " 종    총 재고 " << summary.totalStock << "ea\n";
+    std::cout << "전체 주문 " << summary.totalOrderCount << " 건    생산라인 " << summary.productionQueueCount << "건 대기\n";
     std::cout << "[1] 시료 관리       [2] 시료 주문\n";
     std::cout << "[3] 주문 승인/거절  [4] 모니터링\n";
     std::cout << "[5] 생산라인 조회   [6] 출고 처리\n";
@@ -182,5 +184,55 @@ void ConsoleView::printProductionLineWaiting(const std::vector<ProductionLineWai
     for (const auto& row : waiting) {
         std::cout << row.order << "\t" << row.orderId << "\t" << row.sampleName << "\t"
                    << row.requiredQuantity << " ea\n";
+    }
+}
+
+void ConsoleView::printMonitoringMenu() const {
+    std::cout << "__________________________________________________\n";
+    std::cout << "[4] 모니터링\n";
+    std::cout << "__________________________________________________\n";
+    std::cout << "[1] 주문량 확인    [2] 재고량 확인    [0] 뒤로\n";
+    std::cout << "선택 > ";
+}
+
+namespace {
+std::string OrderStatusLabel(OrderStatus status) {
+    switch (status) {
+        case OrderStatus::RESERVED:  return "RESERVED";
+        case OrderStatus::CONFIRMED: return "CONFIRMED";
+        case OrderStatus::PRODUCING: return "PRODUCING";
+        case OrderStatus::RELEASE:   return "RELEASE";
+        case OrderStatus::REJECTED:  return "REJECTED";
+    }
+    return "UNKNOWN";
+}
+
+std::string InventoryLevelLabel(InventoryLevel level) {
+    switch (level) {
+        case InventoryLevel::SUFFICIENT: return "여유";
+        case InventoryLevel::SHORTAGE:   return "부족";
+        case InventoryLevel::DEPLETED:   return "고갈";
+    }
+    return "UNKNOWN";
+}
+}  // namespace
+
+void ConsoleView::printOrderStatusSummary(const std::map<OrderStatus, int>& counts) const {
+    std::cout << "상태별 주문 현황\n";
+    for (auto status : {OrderStatus::RESERVED, OrderStatus::CONFIRMED, OrderStatus::PRODUCING, OrderStatus::RELEASE}) {
+        const int count = counts.count(status) ? counts.at(status) : 0;
+        std::cout << OrderStatusLabel(status) << "\t" << count << "건";
+        if (status == OrderStatus::PRODUCING) {
+            std::cout << " <- 생산라인 대기";
+        }
+        std::cout << "\n";
+    }
+}
+
+void ConsoleView::printInventoryStatus(const std::vector<SampleInventoryStatus>& items) const {
+    std::cout << "재고 현황\n";
+    std::cout << "시료명\t재고\t상태\n";
+    for (const auto& item : items) {
+        std::cout << item.sampleName << "\t" << item.stock << "\t" << InventoryLevelLabel(item.level) << "\n";
     }
 }

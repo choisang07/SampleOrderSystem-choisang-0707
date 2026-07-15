@@ -113,6 +113,9 @@
     <ClCompile Include="Service\ProductionService.cpp">
       <Filter>Service</Filter>
     </ClCompile>
+    <ClCompile Include="Service\MonitorService.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
     <ClCompile Include="Tests\SampleFactoryTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
@@ -132,6 +135,9 @@
       <Filter>Tests</Filter>
     </ClCompile>
     <ClCompile Include="Tests\ProductionServiceTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\MonitorServiceTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
   </ItemGroup>
@@ -209,6 +215,9 @@
       <Filter>Service</Filter>
     </ClInclude>
     <ClInclude Include="Service\ProductionService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\MonitorService.h">
       <Filter>Service</Filter>
     </ClInclude>
     <ClInclude Include="Tests\Mocks\MockSampleRepository.h">

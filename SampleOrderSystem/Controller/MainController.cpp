@@ -45,7 +45,8 @@ MainController::MainController(bool dataLoadFailed,
       sampleRepo_(sampleRepo),
       orderRepo_(orderRepo),
       productionQueueRepo_(productionQueueRepo),
-      view_(view) {
+      view_(view),
+      monitorService_(orderRepo, sampleRepo, productionQueueRepo) {
 }
 
 void MainController::run() {
@@ -56,7 +57,7 @@ void MainController::run() {
 
     bool running = true;
     while (running) {
-        view_.printMainMenu();
+        view_.printMainMenu(monitorService_.summary());
         const std::string command = view_.promptCommand();
 
         if (!view_.isInputAlive()) {
@@ -242,8 +243,42 @@ void MainController::handleOrder() {
 }
 
 void MainController::handleMonitoring() {
-    // TODO(Phase 5): MonitorService를 통한 상태별 집계/재고 현황 메뉴 구현.
-    view_.printMessage("[모니터링] 기능은 Phase 5에서 구현됩니다.");
+    bool inSubMenu = true;
+    while (inSubMenu) {
+        view_.printMonitoringMenu();
+        const std::string command = view_.promptCommand();
+
+        if (!view_.isInputAlive()) {
+            // 표준입력 EOF 시 무한 루프 방지(design.md §8 이슈 반영, 최상위 메뉴와 동일 패턴).
+            inSubMenu = false;
+            break;
+        }
+
+        if (command == "1") {
+            handleOrderVolumeCheck();
+        } else if (command == "2") {
+            handleInventoryCheck();
+        } else if (command == "0") {
+            inSubMenu = false;
+        } else {
+            view_.printMessage("잘못된 입력입니다.");
+        }
+    }
+}
+
+void MainController::handleOrderVolumeCheck() {
+    // requirement.md 5.5절 "주문량 확인": REJECTED 제외 상태별 건수(design.md §8).
+    view_.printOrderStatusSummary(monitorService_.countAllStatuses());
+}
+
+void MainController::handleInventoryCheck() {
+    // requirement.md 5.5절 "재고량 확인": 시료별 재고/대기 수요/여유·부족·고갈 판정.
+    const auto status = monitorService_.inventoryStatus();
+    if (status.empty()) {
+        view_.printMessage("등록된 시료가 없습니다.");
+        return;
+    }
+    view_.printInventoryStatus(status);
 }
 
 void MainController::handleRelease() {
