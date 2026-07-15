@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" font-family="Segoe UI, Malgun Gothic, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="640" fill="white"/>
+  <text x="500" y="28" text-anchor="middle" font-size="20" font-weight="bold" fill="#1a1a1a">Factory 패턴 - 생성 시점 검증</text>
+
+  <!-- class overview -->
+  <text x="20" y="60" font-size="13" fill="#666">① 클래스 구조 (Domain/Factory/)</text>
+
+  <rect x="60" y="75" width="220" height="70" fill="#eef2ff" stroke="#2b6cb0" stroke-width="1.6"/>
+  <text x="170" y="98" text-anchor="middle" font-size="14" font-weight="bold">SampleFactory</text>
+  <text x="170" y="118" text-anchor="middle" font-size="11">+ create(id, name, avgTime,</text>
+  <text x="170" y="134" text-anchor="middle" font-size="11">yield, stock) : Sample</text>
+
+  <rect x="330" y="75" width="240" height="70" fill="#eef2ff" stroke="#2b6cb0" stroke-width="1.6"/>
+  <text x="450" y="98" text-anchor="middle" font-size="14" font-weight="bold">OrderFactory</text>
+  <text x="450" y="118" text-anchor="middle" font-size="11">+ create(sampleId, customerName,</text>
+  <text x="450" y="134" text-anchor="middle" font-size="11">quantity, ISampleRepository&amp;) : Order</text>
+
+  <rect x="640" y="75" width="220" height="70" fill="#fffef5" stroke="#333" stroke-width="1.6"/>
+  <text x="750" y="98" text-anchor="middle" font-size="14" font-weight="bold">OrderService</text>
+  <text x="750" y="118" text-anchor="middle" font-size="11">reserve()에서</text>
+  <text x="750" y="134" text-anchor="middle" font-size="11">OrderFactory::create() 호출</text>
+
+  <line x1="640" y1="110" x2="572" y2="110" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="605" y="100" text-anchor="middle" font-size="10.5">uses</text>
+
+  <!-- OrderFactory.create flow -->
+  <text x="20" y="195" font-size="13" fill="#666">② OrderFactory::create() 흐름 — "등록된 시료만 주문 가능" (requirement.md 5.2절)</text>
+
+  <rect x="60" y="215" width="170" height="50" rx="6" fill="#fffef5" stroke="#333"/>
+  <text x="145" y="245" text-anchor="middle" font-size="12.5">create(sampleId, ...) 호출</text>
+
+  <polygon points="380,210 470,240 380,270 290,240" fill="#fef3e2" stroke="#c05621" stroke-width="1.6"/>
+  <text x="380" y="235" text-anchor="middle" font-size="11.5">sampleRepo</text>
+  <text x="380" y="250" text-anchor="middle" font-size="11.5">.findById() 존재?</text>
+
+  <rect x="560" y="150" width="200" height="50" rx="6" fill="#e6f4ea" stroke="#2f855a"/>
+  <text x="660" y="180" text-anchor="middle" font-size="12.5" font-weight="bold">Order(ReservedState) 생성</text>
+
+  <rect x="560" y="280" width="200" height="50" rx="6" fill="#fde8e8" stroke="#c53030"/>
+  <text x="660" y="310" text-anchor="middle" font-size="12.5" font-weight="bold">예외 발생 (등록 안 된 시료)</text>
+
+  <line x1="230" y1="240" x2="288" y2="240" stroke="#333" marker-end="url(#arrow)"/>
+  <line x1="470" y1="230" x2="558" y2="185" stroke="#333" marker-end="url(#arrow)"/>
+  <text x="530" y="195" text-anchor="middle" font-size="11" fill="#2f855a">있음 (Yes)</text>
+  <line x1="470" y1="250" x2="558" y2="295" stroke="#333" marker-end="url(#arrow)"/>
+  <text x="530" y="285" text-anchor="middle" font-size="11" fill="#c53030">없음 (No)</text>
+
+  <!-- Repository vs Factory 책임 구분 -->
+  <text x="20" y="400" font-size="13" fill="#666">③ Repository와의 책임 구분</text>
+
+  <rect x="60" y="420" width="380" height="90" rx="6" fill="#e8f0fe" stroke="#2b6cb0"/>
+  <text x="80" y="445" font-size="13" font-weight="bold">Repository (저장 책임)</text>
+  <text x="80" y="465" font-size="11.5">- "어떻게 저장/조회할지"만 안다</text>
+  <text x="80" y="483" font-size="11.5">- JSON 구현체 / Mock 구현체가 각각 존재</text>
+  <text x="80" y="501" font-size="11.5">- 검증 로직 없음</text>
+
+  <rect x="520" y="420" width="380" height="90" rx="6" fill="#fef3e2" stroke="#c05621"/>
+  <text x="540" y="445" font-size="13" font-weight="bold">Factory (생성 유효성 책임)</text>
+  <text x="540" y="465" font-size="11.5">- "이 상태에서 생성이 유효한가"를 안다</text>
+  <text x="540" y="483" font-size="11.5">- Repository 구현체와 무관하게 규칙 1곳에 집중</text>
+  <text x="540" y="501" font-size="11.5">- 예: ID 중복, 수율 범위(0~1), 시료 존재 여부</text>
+
+  <rect x="20" y="545" width="930" height="70" rx="8" fill="#f7f7f7" stroke="#ccc"/>
+  <text x="35" y="568" font-size="12.5" fill="#333">Repository에 검증 로직을 섞으면 구현체(JSON/Mock)마다 중복 구현해야 한다.</text>
+  <text x="35" y="587" font-size="12.5" fill="#333">Factory로 분리하면 저장 방식이 바뀌어도(§ Repository 패턴) 생성 규칙은 그대로 재사용된다.</text>
+</svg>
