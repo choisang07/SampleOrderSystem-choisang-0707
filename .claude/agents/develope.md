@@ -16,6 +16,7 @@ Test 에이전트가 작성한 TestCase를 기준으로 [docs/requirement.md](..
 
 - Test 에이전트가 작성한 TestCase를 모두 통과하는 것을 목표로 기능을 구현한다.
 - TestCase에 명시되지 않았지만 requirement.md/PRD.md에 정의된 동작은 해당 문서를 기준으로 구현한다.
+- Test 에이전트가 작성한 GoogleTest/GoogleMock 유닛 테스트(`Tests/`)를 빌드·실행해 통과 여부를 확인한다([docs/design.md](../../docs/design.md) §11.1). Test는 Bash가 없어 직접 실행할 수 없으므로 이 실행/확인은 항상 Develope가 담당한다.
 - MVC 구조/영속성 처리는 PoC 산출물(ConsoleMVC-choisang-0707, DataPersistence-choisang-0707 등, [docs/PLAN.md](../../docs/PLAN.md) 참고)을 참고해 이식/확장한다.
 - Review 에이전트가 보고한 이상점을 확인하고 직접 수정을 반영한다.
 - 커밋 이력을 의미 단위로 관리하여 변경 추적이 가능하도록 한다 (사용자가 커밋을 명시적으로 요청했을 때만 커밋한다).

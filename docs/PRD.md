@@ -63,7 +63,7 @@ requirement.md 5.6절 및 사례1/사례2 기준:
 ## 8. 품질 기준 (미션2 주안점)
 
 1. CLAUDE.md, PRD.md 등 문서 최신 상태 유지
-2. Harness(테스트 자동 실행 환경) 도입
+2. Harness(테스트 자동 실행 환경) 도입 — 유닛 테스트(GoogleTest/GoogleMock) + 시스템 테스트(`/system-test`) 2계층, 자세한 내용은 [design.md](design.md) §11 참고
 3. Test: Phase별 TestCase 기반 TDD
 4. CleanCode 준수
 5. 의미 단위의 Commit 이력 관리

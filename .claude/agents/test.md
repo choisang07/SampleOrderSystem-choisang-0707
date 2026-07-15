@@ -20,6 +20,7 @@ color: blue
 - 각 테스트케이스는 Develope 에이전트가 그대로 구현/실행할 수 있도록 입력값, 실행 조건, 기대 결과를 명확히 기술한다.
 - Review 에이전트가 넘긴 피드백을 반영해 회귀 테스트 계획을 갱신하고, Develope가 수정한 뒤 재검증할 항목을 정리한다.
 - 콘솔로 재현 가능한 시나리오는 `system-test` 스킬의 케이스 목록(`.claude/skills/system-test/run.ps1`의 `$cases` 배열)에도 `Write`로 추가해, Phase가 진행돼도 이전 Phase의 콘솔 입출력 회귀가 실제로 실행 가능하도록 유지한다(형식은 [.claude/skills/system-test/SKILL.md](../skills/system-test/SKILL.md) 참고). requirement.md 5.6절 사례1/사례2는 반드시 이 회귀 세트에도 포함한다.
+- `Domain/*`(State 전이, Factory 검증)과 `Service/*`(재고 차감, 실생산량 계산 등)에 대해서는 GoogleTest/GoogleMock 기반 유닛 테스트 코드(`Tests/`)도 `Write`로 작성한다 — Repository 인터페이스는 `gmock`의 `MOCK_METHOD`로 Mock 클래스를 만들어 파일 I/O 없이 검증한다([docs/design.md](../../docs/design.md) §11.1 참고). 사례1/사례2는 system-test뿐 아니라 이 유닛 테스트로도 반드시 커버한다.
 
 ## 권한 (반드시 준수)
 

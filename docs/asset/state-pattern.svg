@@ -64,7 +64,7 @@
   <rect x="700" y="345" width="200" height="90" fill="#fffef5" stroke="#333" stroke-width="1.6"/>
   <line x1="700" y1="370" x2="900" y2="370" stroke="#333"/>
   <text x="800" y="363" text-anchor="middle" font-size="14" font-weight="bold">Order</text>
-  <text x="712" y="388" font-size="12">- state_: unique_ptr&lt;IOrderState&gt;</text>
+  <text x="712" y="388" font-size="12">- state_: IOrderState* (non-owning)</text>
   <text x="712" y="405" font-size="12">+ approve() / reject()</text>
   <text x="712" y="422" font-size="12">+ completeProduction() / release()</text>
 
@@ -79,6 +79,8 @@
   <!-- composition Order -> IOrderState -->
   <line x1="700" y1="390" x2="582" y2="390" stroke="#333" stroke-width="1.6" marker-start="url(#diamond)"/>
   <text x="640" y="380" text-anchor="middle" font-size="11" fill="#555">1</text>
+
+  <text x="20" y="518" font-size="11.5" fill="#666">각 상태 클래스는 인스턴스 필드 없는 stateless 싱글턴(static instance())이다 — 전이마다 힙 할당 없음.</text>
 
   <!-- concrete states -->
   <g font-size="12.5">

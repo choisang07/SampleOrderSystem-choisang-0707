@@ -52,7 +52,7 @@
 
 | Phase | 범위 | 의존 관계 | 브랜치 |
 |---|---|---|---|
-| Phase 0 | 준비: PoC 산출물 이식(MVC 스켈레톤/영속성 구조), PRD.md 확정, Harness 셋업 | - | `phase/0-setup` |
+| Phase 0 | 준비: PoC 산출물 이식(MVC 스켈레톤/영속성 구조), PRD.md 확정, Harness 셋업(GoogleTest/GoogleMock + `/system-test`, design.md §11 참고) | - | `phase/0-setup` |
 | Phase 1 | 시료 관리 (등록/조회/검색) | Phase 0 | `phase/1-sample-management` |
 | Phase 2 | 주문 접수 (시료 예약 → RESERVED) | Phase 1 | `phase/2-order-reservation` |
 | Phase 3 | 주문 승인/거절 + 생산 라인 (재고확인, CONFIRMED/PRODUCING/REJECTED 분기, 생산 큐 FIFO, 실생산량 계산, 생산완료 처리) | Phase 2 | `phase/3-approval-production` |

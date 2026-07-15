@@ -15,7 +15,7 @@ Test와 Review는 **도구 자체가 없어서** 코드나 PRD를 수정할 수 
 
 - **Test**: Phase별 테스트케이스를 작성할 때마다 `docs_temp/Phase{N}.md`에 각 테스트케이스 설명을 정리해 추가한다. 콘솔로 재현 가능한 시나리오는 `/system-test` 스킬([.claude/skills/system-test/SKILL.md](../.claude/skills/system-test/SKILL.md))의 케이스 목록에도 추가해, Phase가 진행돼도 이전 Phase의 콘솔 입출력 회귀를 실제로 실행 가능한 상태로 유지한다.
 - **Develope**: `[feat]`/`[refactoring]` 커밋 전에는 반드시 `/system-test` 스킬로 빌드(및 등록된 회귀 케이스가 있다면 통과 여부)를 확인한다(`[test]` 커밋은 제외). 커밋 메시지 규칙은 [CLAUDE.md](../CLAUDE.md) 5절 참고.
-- **Review**: 요구사항/TestCase 충족 여부와 별개로, [design.md](design.md)에 정의된 디자인 패턴(State/Repository+DIP/Strategy/Factory) 구조와 규칙이 실제 코드에 지켜지고 있는지도 확인한다.
+- **Review**: 요구사항/TestCase 충족 여부와 별개로, [design.md](design.md)에 정의된 디자인 패턴(State/Repository+DIP/Factory) 구조와 규칙이 실제 코드에 지켜지고 있는지도 확인한다.
 
 ## 호출 방법
 
