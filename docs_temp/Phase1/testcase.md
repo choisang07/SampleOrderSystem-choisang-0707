@@ -148,11 +148,12 @@
 - **Then**: **대소문자 구분 없이 매칭**되어 결과에 `S-001`이 포함된다(확정).
 - **참조**: abnormal.md 4번 항목(확정)
 
-### TC-P1-023: 빈 검색어 입력 [확정: 재입력 요구]
+### TC-P1-023: 빈 검색어 입력 [확정: 재입력 요구] — 공백만 있는 검색어도 동일하게 거부 (회귀 갱신 반영)
 - **대상 기능**: 이름 검색 — 빈 입력 경계
 - **Given**: 임의의 시료가 등록되어 있음.
-- **When**: 검색어로 빈 문자열("")을 입력한다.
-- **Then**: **"검색어를 입력하세요" 류의 안내 메시지 표시 후 재입력을 요구한다**(검색을 실행하지 않고 전체 목록을 반환하지도 않는다). 크래시 없이 재입력 루프로 복귀해야 한다.
+- **When**: 검색어로 (a) 빈 문자열("") 또는 (b) 공백 문자만으로 이루어진 문자열("   ")을 입력한다.
+- **Then**: **두 경우 모두 "검색어를 입력하세요" 안내 메시지 표시 후 재입력을 요구한다**(검색을 실행하지 않고 전체 목록을 반환하지도 않는다). 크래시 없이 재입력 루프로 복귀해야 한다. `SampleService::search`가 `SampleFactory::isBlank`(등록 시 이름 검증과 동일한 유틸)를 사용해 빈 문자열/공백 전용 문자열을 동일 기준으로 거부하도록 구현되었다(Review Medium 이상점 반영, 커밋 `e244177`).
+- **회귀 확인(2026-07-15)**: `Tests/SampleServiceTest.cpp`의 `SampleServiceSearchTest.EmptyKeyword_Throws`(빈 문자열)와 `SampleServiceSearchTest.BlankKeyword_Throws`(공백 문자열 " ") 두 테스트 모두 Debug 빌드에서 직접 실행해 PASS 확인함(24개 유닛 테스트 전체 통과 중 일부).
 - **참조**: abnormal.md 6번 항목(확정), requirement.md 5.2절
 
 ### TC-P1-024: 존재하지 않는 이름으로 검색
@@ -217,13 +218,46 @@
 | TC-P1-010~012 | `SampleService::listAll` | `findAll` 반환값을 빈 벡터/N개 벡터(재고 포함)로 스텁 |
 | TC-P1-020~025 | `SampleService::search` | `findAll` 스텁 후 필터링 로직(부분 일치/대소문자 무시/이름만 대상/ID 미포함/빈 검색어 예외)만 검증 |
 
-시스템 테스트(`/system-test`) 이관 후보는 TC-P1-001(정상 등록), TC-P1-010(빈 목록 조회), TC-P1-020(정상 검색), TC-P1-032(통합 플로우)다. 다만 **실제 메뉴 문구/입력 순서는 아직 Develope 구현 전이라 정확한 `Expect` 문자열을 특정할 수 없어, 이번 단계에서도 `.claude/skills/system-test/run.ps1`의 `$cases` 반영은 보류한다**(이전 단계에서 이미 이렇게 판단했고, 이번 확정 작업에서도 동일하게 유지). Develope가 Phase 1 메뉴 구현을 완료한 뒤, tester가 실제 출력 문구를 확인해 `$cases`에 추가하는 후속 작업이 필요하다.
+시스템 테스트(`/system-test`) 이관 후보는 TC-P1-001(정상 등록), TC-P1-010(빈 목록 조회), TC-P1-020(정상 검색), TC-P1-032(통합 플로우)다.
+
+**2026-07-15 회귀 검증 시 반영 완료**: Develope의 Phase 1 메뉴 구현(`bf75a40`, `7a5655d`, `e244177`)이 끝난 뒤, tester가 Release 빌드를 직접 실행해 실제 콘솔 출력 문구(메뉴 문구, 프롬프트, 등록/조회/검색 결과 표 포맷)를 채취하고, `.claude/skills/system-test/run.ps1`의 `$cases` 배열에 위 4개 케이스를 전체 콘솔 세션 출력(빈 줄 제거, 개행 `` `n `` 결합) 형태로 추가했다. `/system-test` 스킬로 Release 빌드 + 4개 케이스를 재실행해 4건 전부 PASS(실패 0건) 확인함.
 
 ---
 
-## 다음 단계 (Develope 인계)
+## 다음 단계 (Develope 인계) — 최초 작성 시점 기준, 전부 완료됨
 
-1. `SampleFactory::create`, `SampleService::registerSample`/`listAll`/`search`의 실제 시그니처를 구현하고, `Tests/*.cpp`가 그 시그니처와 맞는지 확인한다(다르면 tester가 회귀 단계에서 갱신). ID 채번 포맷은 **`S-{3자리 순번}`**(예: `S-001`)로 구현한다(design.md §5/§8, screens.md 200행 기준 확정).
-2. `MainController::handleSampleManagement()`를 등록/조회/검색 하위 메뉴로 구현한다(TC-P1-030~033).
-3. Debug 구성으로 `Tests/SampleFactoryTest.cpp`, `Tests/SampleServiceTest.cpp`를 빌드/실행해 통과 여부를 확인한다. 새 `Tests/*.cpp`, `Tests/Mocks/*.h` 파일을 `SampleOrderSystem.vcxproj`/`.vcxproj.filters`에 포함해야 컴파일 대상에 잡힌다(현재 vcxproj에는 미포함 상태 — Test 역할은 vcxproj를 직접 수정하지 않았다).
-4. 구현 완료 후 tester가 실제 메뉴 문구를 확인해 `.claude/skills/system-test/run.ps1`의 `$cases`에 TC-P1-001/010/020/032 대응 콘솔 재현 케이스를 추가한다.
+1. ~~`SampleFactory::create`, `SampleService::registerSample`/`listAll`/`search`의 실제 시그니처를 구현...~~ → **완료**(`bf75a40`). 실제 시그니처가 이 문서의 가정과 정확히 일치함을 회귀 단계에서 재확인함. ID 채번 포맷 `S-{3자리 순번}`도 그대로 구현됨.
+2. ~~`MainController::handleSampleManagement()`를 등록/조회/검색 하위 메뉴로 구현...~~ → **완료**(`7a5655d`, TC-P1-030~033 대응 확인).
+3. ~~Debug 구성으로 `Tests/*.cpp`를 빌드/실행해 통과 여부 확인, vcxproj 포함...~~ → **완료**. `SampleOrderSystem.vcxproj`에 `Tests\SampleFactoryTest.cpp`, `Tests\SampleServiceTest.cpp`, `Tests\Mocks\MockSampleRepository.h`가 포함되어 있으며, `main.cpp`가 `_DEBUG`일 때 `RUN_ALL_TESTS()`를 실행하는 구조(Debug 빌드 실행 파일 자체가 테스트 러너)로 구현되어 있음을 확인함.
+4. ~~구현 완료 후 tester가 실제 메뉴 문구를 확인해 `$cases`에 케이스 추가...~~ → **완료**. 아래 "F. 회귀 검증 결과" 참고.
+
+## F. 회귀 검증 결과 (2026-07-15, Phase 1 구현 완료 + Review 반영 후)
+
+### F.1 유닛 테스트 직접 실행 확인
+- Debug|x64로 `msbuild SampleOrderSystem.slnx /p:Configuration=Debug /p:Platform=x64`를 직접 실행해 빌드 성공을 확인했다.
+- `x64/Debug/SampleOrderSystem.exe`를 직접 실행(`main.cpp`가 `_DEBUG`에서 `InitGoogleMock()` + `RUN_ALL_TESTS()`를 호출하는 구조)해 **`SampleFactoryTest`(11개) + `SampleServiceTest`(6개) + `SampleServiceSearchTest`(7개) = 24개 전부 PASS**를 tester가 직접 재현 확인했다(Develope 보고를 그대로 신뢰하지 않고 재검증).
+- TC-P1-023 회귀 갱신에 따른 `BlankKeyword_Throws`(공백 검색어) 테스트도 이 24개에 포함되어 PASS 확인됨.
+
+### F.2 Phase 1 자체 회귀 (TC-P1-001~033)
+- `docs_temp/Phase1/testcase.md`의 각 케이스를 실제 구현 코드(`SampleFactory.h/.cpp`, `SampleService.h/.cpp`, `MainController.cpp`, `ConsoleView.cpp/.h`)와 전량 대조했다. 시그니처, 검증 규칙(이름 필수/평균생산시간>0/수율(0,1]), ID 채번 로직(`S-{3자리 순번}`, `findAll()` 기반 최댓값+1), 검색 규칙(부분 일치/대소문자 무시/이름만 대상), 빈 검색어·공백 검색어 재입력 요구, 하위 메뉴 잘못된 입력 처리까지 모두 문서 기술과 일치함을 확인했다.
+- TC-P1-023만 검색어 공백 처리 통일(Review 반영, `e244177`)에 맞춰 갱신했다(위 A~D 절 본문 참고).
+- 결론: **TC-P1-001~033 전체 통과로 판단**(치명적 불일치 없음).
+
+### F.3 Phase 0 회귀 확인
+- Phase 0에서 이식된 `Persistence/JsonFileStore`, `Repository/JsonSampleRepository` 등은 Phase 1에서 `SampleFactory`/`SampleService`가 그 위에 얹히는 구조로만 사용되고 직접 수정되지 않았음을 소스 확인으로 재검증했다(Phase 1 커밋 diff 범위가 `Domain/Factory/*`, `Service/*`, `Controller/MainController.*`, `View/ConsoleView.*`, `Tests/*`, `vcxproj`에 한정됨).
+- `/system-test` Release 빌드 및 아래 F.4 콘솔 회귀 케이스가 정상 동작한다는 것 자체가 `JsonSampleRepository::save`/`findAll` 즉시 영속화 계약(TC-P1-032, TC-P1-033의 전제)이 깨지지 않았음을 실증한다.
+- **Phase 0 전용 회귀 케이스 등록 여부**: `docs_temp/Phase0/testcase.md`/`abnormal.md`를 확인한 결과, Phase 0은 "requirement.md 기반 기능이 아닌 스캐폴딩 단계"라는 이유로 애초에 Given/When/Then 형태 TestCase 자체를 작성하지 않기로 명시적으로 정해져 있었다(검증은 `/system-test` 빌드 성공 확인 + Review 아키텍처 검토로 대체). 즉 `run.ps1`의 `$cases`에 Phase 0 전용 케이스가 없는 것은 **누락이 아니라 애초 계획대로**다. 자세한 판단 근거는 `docs_temp/Phase1/abnormal.md`의 신규 항목(7번) 참고.
+
+### F.4 신규 콘솔 회귀 케이스 (`.claude/skills/system-test/run.ps1`)
+Phase 1 메뉴 구현이 확정된 실제 문구/입력 순서를 `View/ConsoleView.cpp`, `Controller/MainController.cpp`를 직접 읽고 Release 빌드를 실제로 실행해 채취한 뒤, 아래 4개 케이스를 `$cases`에 추가했다:
+
+| Category | 대응 TestCase | InputLines |
+|---|---|---|
+| `TC-P1-001 시료 등록 (정상 등록)` | TC-P1-001 | `1,1,WaferA,2.0,0.9,0,0` |
+| `TC-P1-010 시료 조회 (빈 목록)` | TC-P1-010 | `1,2,0,0` |
+| `TC-P1-020 시료 검색 (정상 검색)` | TC-P1-020 | `1,1,WaferA,2.0,0.9,3,WaferA,0,0` |
+| `TC-P1-032 등록->조회->검색 통합 플로우` | TC-P1-032 | `1,1,WaferA,2.0,0.9,2,3,Wafer,0,0` |
+
+각 케이스의 `Expect`는 프롬프트 문구까지 포함한 전체 콘솔 세션 출력(빈 줄 제거, 개행 결합)이다 — `run.ps1`의 비교 로직이 `$actual`(전체 캡처 출력) 대 `$case.Expect`의 **완전 일치**이기 때문에, 일부 고정 문구만이 아니라 세션 전체를 그대로 기술해야 한다(스크립트 실측 후 확정).
+
+`/system-test` 스킬로 Release 빌드 1회 + 4개 케이스를 실행해 **4건 중 실패 0건**을 확인했다(빌드 성공 + 전체 케이스 PASS).

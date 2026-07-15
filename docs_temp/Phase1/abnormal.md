@@ -73,6 +73,14 @@ Test 에이전트는 Edit/Bash로 프로덕션 코드나 PRD/요구사항 문서
 
 - **`ISampleRepository`에 채번 전용 메서드가 없음**: 현재 인터페이스는 `findById`/`findAll`/`save`만 있다. `S-{3자리 순번}` 자동 채번을 어느 계층(Repository vs Factory/Service가 `findAll()` 결과로 직접 계산)에서 수행할지는 Develope의 구현 선택으로 남겨둔다. testcase.md TC-P1-002b, `Tests/SampleFactoryTest.cpp`는 "결과적으로 다음 ID가 올바르게 계산된다"만 검증하므로 어느 방식이든 무방하다.
 
+## 7. Phase 0 회귀 케이스가 `run.ps1`의 `$cases`에 등록되어 있지 않음 — 누락 아님, 판단 근거 확인
+
+- 2026-07-15 Phase 1 회귀 검증 중 `.claude/skills/system-test/run.ps1`을 확인한 결과, Phase 0 스켈레톤/영속성 계층(`JsonFileStore`, `JsonSampleRepository`, 데이터 손상 배너 등)에 대응하는 콘솔 재현 회귀 케이스가 `$cases` 배열에 하나도 없었다(Phase 1 케이스를 추가하기 전 `$cases`는 주석 처리된 예시 1개만 있는 빈 배열이었다).
+- 이것이 Phase 0 완료 시 등록됐어야 할 케이스의 **누락**인지 확인하기 위해 `docs_temp/Phase0/testcase.md`, `docs_temp/Phase0/abnormal.md`를 재확인했다.
+- **확인 결과: 누락이 아니라 애초 계획대로다.** `docs_temp/Phase0/testcase.md`에 "Phase 0은 requirement.md 기반 기능 동작이 아니라 PoC 이식/패키지 구조 셋업(스캐폴딩) 단계라, Given/When/Then 형태의 통상적인 TestCase는 없다. 검증은 `/system-test` 스킬을 통한 Release 빌드 성공 확인 + Review 에이전트의 아키텍처 준수 여부 검토로 대체한다"라고 명시적으로 기록되어 있다. 즉 Phase 0 시점에는 시료 등록/조회 등 실제 메뉴 기능 자체가 아직 구현되지 않은 TODO 스텁 상태였으므로(`MainController::handleSampleManagement()`가 "[시료 관리] 기능은 Phase 1에서 구현됩니다." 안내만 출력), 콘솔 입출력으로 재현할 "기능"이 애초에 존재하지 않아 케이스를 만들 수 없었다.
+- Phase 0의 데이터 로드 실패 배너(`printDataLoadFailureBanner`), EOF 처리 등 방어 로직은 Review(아키텍처 검토)로만 확인되었고 콘솔 회귀 케이스화되지는 않았다. 이 부분은 지금도 여전히 `$cases`에 없다 — 필요하다면 향후 Phase에서 "손상된 store.json으로 기동 시 경고 배너" 같은 시나리오를 회귀 케이스로 추가하는 것을 고려할 수 있으나, 이는 이번 Phase 1 범위를 벗어나는 개선 제안이므로 별도 확정 없이 백로그로만 남겨둔다(사용자 판단 필요 시 별도 요청).
+- 결론: Phase 1 회귀 케이스 추가로 이제 `$cases`에 처음으로 실제 콘솔 재현 케이스(TC-P1-001/010/020/032)가 생겼고, 이 케이스들이 통과한다는 사실 자체가 Phase 0에서 이식한 영속성 계층이 Phase 1 코드 추가로 깨지지 않았음을 실증적으로 뒷받침한다(TC-P1-032/033가 `JsonSampleRepository`의 즉시 영속화 계약에 의존하는 케이스이기 때문).
+
 ## 우선순위 요약 (해소 상태)
 
 1. ~~(High) 3번 — 수율 0 처리 방침~~ → **확정 완료**(`(0, 1]`).
