@@ -155,12 +155,14 @@
     <ClCompile Include="Domain\Factory\OrderFactory.cpp" />
     <ClCompile Include="Service\SampleService.cpp" />
     <ClCompile Include="Service\OrderService.cpp" />
+    <ClCompile Include="Service\ReleaseService.cpp" />
     <ClCompile Include="Controller\MainController.cpp" />
     <ClCompile Include="View\ConsoleView.cpp" />
     <ClCompile Include="Tests\SampleFactoryTest.cpp" />
     <ClCompile Include="Tests\SampleServiceTest.cpp" />
     <ClCompile Include="Tests\OrderFactoryTest.cpp" />
     <ClCompile Include="Tests\OrderServiceTest.cpp" />
+    <ClCompile Include="Tests\ReleaseServiceTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vendor\nlohmann\json.hpp" />
@@ -178,6 +180,7 @@
     <ClInclude Include="Domain\Factory\OrderFactory.h" />
     <ClInclude Include="Service\SampleService.h" />
     <ClInclude Include="Service\OrderService.h" />
+    <ClInclude Include="Service\ReleaseService.h" />
     <ClInclude Include="Controller\MainController.h" />
     <ClInclude Include="View\ConsoleView.h" />
     <ClInclude Include="Tests\Mocks\MockSampleRepository.h" />

@@ -82,3 +82,26 @@ void ConsoleView::printOrderReservationComplete(const std::string& orderId, cons
     std::cout << "주문번호    " << orderId << "\n";
     std::cout << "현재 상태 " << status << "\n";
 }
+
+void ConsoleView::printReleaseMenu() const {
+    std::cout << "__________________________________________________\n";
+    std::cout << "[6] 출고 처리\n";
+    std::cout << "__________________________________________________\n";
+}
+
+void ConsoleView::printReleasableOrderList(const std::vector<Order>& orders) const {
+    std::cout << "출고 가능 주문 (CONFIRMED)\n\n";
+    std::cout << "번호\t주문번호\t고객\t시료\n";
+    for (size_t i = 0; i < orders.size(); ++i) {
+        std::cout << "[" << (i + 1) << "]\t" << orders[i].id << "\t"
+                   << orders[i].customerName << "\t" << orders[i].sampleId << "\n";
+    }
+}
+
+void ConsoleView::printReleaseComplete(const Order& order, const std::string& processedAt) const {
+    std::cout << "\n출고 처리 완료\n\n";
+    std::cout << "주문번호\t" << order.id << "\n";
+    std::cout << "출고수량\t" << order.quantity << " ea\n";
+    std::cout << "처리일시 " << processedAt << "\n";
+    std::cout << "상태        " << toString(order.status) << "\n";
+}

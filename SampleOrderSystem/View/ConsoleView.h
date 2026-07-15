@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "../Model/Order.h"
 #include "../Model/Sample.h"
 
 // 콘솔 출력/입력만 전담한다. 로직은 없다(ConsoleMVC PoC 원칙 유지, design.md §3).
@@ -38,4 +39,13 @@ public:
 
     // 예약 접수 완료 화면(주문번호/현재 상태) 출력.
     void printOrderReservationComplete(const std::string& orderId, const std::string& status) const;
+
+    // [6] 출고 처리 메뉴 출력(docs/screens.md 기준).
+    void printReleaseMenu() const;
+
+    // 출고 가능(CONFIRMED) 주문 목록을 번호와 함께 출력한다.
+    void printReleasableOrderList(const std::vector<Order>& orders) const;
+
+    // 출고 처리 완료 안내(주문번호/출고수량/처리일시/상태)를 출력한다.
+    void printReleaseComplete(const Order& order, const std::string& processedAt) const;
 };
