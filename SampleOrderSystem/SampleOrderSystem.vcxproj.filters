@@ -33,6 +33,21 @@
     <Filter Include="vendor">
       <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-000000000006}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Domain">
+      <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-000000000007}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Domain\Factory">
+      <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-000000000008}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Service">
+      <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-000000000009}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-00000000000a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Mocks">
+      <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-00000000000b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -58,6 +73,18 @@
     </ClCompile>
     <ClCompile Include="View\ConsoleView.cpp">
       <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Domain\Factory\SampleFactory.cpp">
+      <Filter>Domain\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\SampleService.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\SampleFactoryTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\SampleServiceTest.cpp">
+      <Filter>Tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +126,15 @@
     </ClInclude>
     <ClInclude Include="View\ConsoleView.h">
       <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="Domain\Factory\SampleFactory.h">
+      <Filter>Domain\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\SampleService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\Mocks\MockSampleRepository.h">
+      <Filter>Tests\Mocks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

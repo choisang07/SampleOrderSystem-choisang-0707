@@ -65,14 +65,14 @@
 ### Phase별 브랜치 전략
 
 - Phase 시작 시 develope 에이전트가 `master`에서 위 표의 브랜치(`phase/{N}-{slug}`)를 생성/체크아웃한다. 해당 Phase의 `test → develope → review → develope → test` 루프 동안 모든 커밋은 이 브랜치에서만 이뤄진다.
-- test/review 에이전트는 브랜치를 스스로 전환하지 않는다 — develope가 체크아웃해 둔 현재 작업 트리 상태를 그대로 대상으로 삼는다.
+- TestCodeDeveloper 에이전트는 Bash 권한이 있어 테스트 산출물(테스트케이스/테스트 코드)을 직접 커밋할 수 있으나, develope가 체크아웃해 둔 Phase 브랜치를 그대로 사용하고 다른 브랜치로 전환하지 않는다. review 에이전트는 도구가 없어 브랜치를 스스로 전환하지 않는다 — develope가 체크아웃해 둔 현재 작업 트리 상태를 그대로 대상으로 삼는다.
 - 해당 Phase의 회귀 테스트(`test` 에이전트의 마지막 단계)가 모두 통과하면, develope 에이전트(또는 사용자 승인 하에 메인 에이전트)가 `phase/{N}-{slug}` → `master` PR을 생성한다. 사용자 확인 후 머지하고 다음 Phase로 이동한다.
 - PoC 4개 저장소는 본 프로젝트와 별개의 독립 저장소이므로 이 브랜치 전략 대상이 아니다.
 
 ### Phase별 진행 루프 (TDD)
 
 ```
-Agent(test)      : Phase 범위의 TestCase 작성 (Edit/Bash 없음 — 코드 수정 불가)
+Agent(TestCodeDeveloper) : Phase 범위의 TestCase 작성 (Write/Edit 모두 가능, 단 프로덕션 코드/PRD는 대상 제외, Bash로 git 커밋 가능)
    │
    ▼
 Agent(develope)  : TestCase 기반 구현 (PoC 산출물을 MVC/영속성 기반으로 참고)
@@ -84,7 +84,7 @@ Agent(review)    : 코드 리뷰, ReportFindings로 이상점 보고 (Write/Edit
 Agent(develope)  : 이상점 반영
    │
    ▼
-Agent(test)      : 회귀 테스트 (해당 Phase + 이전 Phase 전체 재검증)
+Agent(TestCodeDeveloper) : 회귀 테스트 (해당 Phase + 이전 Phase 전체 재검증)
    │
    ▼
 Agent(develope)  : phase/{N}-{slug} → master PR 생성 (사용자 확인 후 머지)
