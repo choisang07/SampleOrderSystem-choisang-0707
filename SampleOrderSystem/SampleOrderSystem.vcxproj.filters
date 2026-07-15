@@ -39,6 +39,9 @@
     <Filter Include="Domain\Factory">
       <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-000000000008}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Domain\OrderState">
+      <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-00000000000c}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Service">
       <UniqueIdentifier>{1a1a1a1a-0001-0001-0001-000000000009}</UniqueIdentifier>
     </Filter>
@@ -80,6 +83,24 @@
     <ClCompile Include="Domain\Factory\OrderFactory.cpp">
       <Filter>Domain\Factory</Filter>
     </ClCompile>
+    <ClCompile Include="Domain\OrderState\IOrderState.cpp">
+      <Filter>Domain\OrderState</Filter>
+    </ClCompile>
+    <ClCompile Include="Domain\OrderState\ReservedState.cpp">
+      <Filter>Domain\OrderState</Filter>
+    </ClCompile>
+    <ClCompile Include="Domain\OrderState\ProducingState.cpp">
+      <Filter>Domain\OrderState</Filter>
+    </ClCompile>
+    <ClCompile Include="Domain\OrderState\ConfirmedState.cpp">
+      <Filter>Domain\OrderState</Filter>
+    </ClCompile>
+    <ClCompile Include="Domain\OrderState\ReleasedState.cpp">
+      <Filter>Domain\OrderState</Filter>
+    </ClCompile>
+    <ClCompile Include="Domain\OrderState\RejectedState.cpp">
+      <Filter>Domain\OrderState</Filter>
+    </ClCompile>
     <ClCompile Include="Service\SampleService.cpp">
       <Filter>Service</Filter>
     </ClCompile>
@@ -87,6 +108,9 @@
       <Filter>Service</Filter>
     </ClCompile>
     <ClCompile Include="Service\ReleaseService.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\ProductionService.cpp">
       <Filter>Service</Filter>
     </ClCompile>
     <ClCompile Include="Tests\SampleFactoryTest.cpp">
@@ -102,6 +126,12 @@
       <Filter>Tests</Filter>
     </ClCompile>
     <ClCompile Include="Tests\ReleaseServiceTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\OrderStateTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\ProductionServiceTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
   </ItemGroup>
@@ -151,6 +181,24 @@
     <ClInclude Include="Domain\Factory\OrderFactory.h">
       <Filter>Domain\Factory</Filter>
     </ClInclude>
+    <ClInclude Include="Domain\OrderState\IOrderState.h">
+      <Filter>Domain\OrderState</Filter>
+    </ClInclude>
+    <ClInclude Include="Domain\OrderState\ReservedState.h">
+      <Filter>Domain\OrderState</Filter>
+    </ClInclude>
+    <ClInclude Include="Domain\OrderState\ProducingState.h">
+      <Filter>Domain\OrderState</Filter>
+    </ClInclude>
+    <ClInclude Include="Domain\OrderState\ConfirmedState.h">
+      <Filter>Domain\OrderState</Filter>
+    </ClInclude>
+    <ClInclude Include="Domain\OrderState\ReleasedState.h">
+      <Filter>Domain\OrderState</Filter>
+    </ClInclude>
+    <ClInclude Include="Domain\OrderState\RejectedState.h">
+      <Filter>Domain\OrderState</Filter>
+    </ClInclude>
     <ClInclude Include="Service\SampleService.h">
       <Filter>Service</Filter>
     </ClInclude>
@@ -160,10 +208,16 @@
     <ClInclude Include="Service\ReleaseService.h">
       <Filter>Service</Filter>
     </ClInclude>
+    <ClInclude Include="Service\ProductionService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
     <ClInclude Include="Tests\Mocks\MockSampleRepository.h">
       <Filter>Tests\Mocks</Filter>
     </ClInclude>
     <ClInclude Include="Tests\Mocks\MockOrderRepository.h">
+      <Filter>Tests\Mocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\Mocks\MockProductionQueueRepository.h">
       <Filter>Tests\Mocks</Filter>
     </ClInclude>
   </ItemGroup>
