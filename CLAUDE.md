@@ -8,6 +8,7 @@
 - 상세 요구사항: [docs/requirement.md](docs/requirement.md)
 - 제품 요구사항 정의: [docs/PRD.md](docs/PRD.md)
 - 아키텍처 설계(패키지 구조, 디자인 패턴, JSON 스키마): [docs/design.md](docs/design.md)
+- 콘솔 화면 예시(메뉴별 UI 기준): [docs/screens.md](docs/screens.md)
 - 진행 계획(Phase, 워크플로우): [docs/PLAN.md](docs/PLAN.md)
 - 역할 정의: [docs/role.md](docs/role.md) (개요), 실제 Subagent 정의는 [.claude/agents/](.claude/agents/) 하위 (test.md, poc.md, develope.md, review.md)
 
@@ -35,7 +36,7 @@
 - 재고 확인 시 생산 큐는 절대 고려하지 않는다 (다른 주문이 예정한 미래 생산분은 무시). 자세한 근거는 [docs/requirement.md](docs/requirement.md) 5.6절 사례1/사례2 참고.
 
 ### 4. 문서 최신화
-- 요구사항/아키텍처/계획/역할에 변경이 생기면 docs/requirement.md, docs/PRD.md, docs/PLAN.md, docs/design.md, docs/role.md 중 해당 문서를 함께 갱신한다.
+- 요구사항/아키텍처/계획/역할/화면에 변경이 생기면 docs/requirement.md, docs/PRD.md, docs/PLAN.md, docs/design.md, docs/role.md, docs/screens.md 중 해당 문서를 함께 갱신한다.
 - Review 결과는 `docs/reviews/`, Test 케이스는 test Subagent 정의([.claude/agents/test.md](.claude/agents/test.md))의 산출물 규칙을 따라 기록한다.
 
 ### 5. 커밋 메시지 규칙

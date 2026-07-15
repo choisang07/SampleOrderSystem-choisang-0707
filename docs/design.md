@@ -205,14 +205,16 @@ CLAUDE.md/PRD.md 4장의 규칙을 `OrderService`/`ProductionService`와 §4의 
 
 ## 7. 메뉴 구성 (Controller 라우팅)
 
-requirement.md 5.1절 메인 메뉴를 그대로 따른다. 데이터 모니터링/Dummy 데이터 생성 PoC는 **별도 실행 파일이 아니라 본 시스템 메뉴에 통합**한다(PRD.md 6장 방향과 일치).
+requirement.md 5.1절 메인 메뉴를 따르되, "주문(접수/승인/거절)"은 실제 화면 예시([docs/screens.md](screens.md))에서 **"시료 주문"과 "주문 승인/거절" 2개 메뉴로 분리**되어 있으며 이는 Phase 2/3 경계와 정확히 일치한다. 데이터 모니터링/Dummy 데이터 생성 PoC는 **별도 실행 파일이 아니라 본 시스템 메뉴에 통합**한다(PRD.md 6장 방향과 일치).
 
-| 메뉴 | 대응 Service | 대응 Phase(PLAN.md) |
-|---|---|---|
-| 시료 관리 | SampleService | Phase 1 |
-| 주문 (접수/승인/거절) | OrderService, ProductionService | Phase 2, Phase 3 |
-| 모니터링 | MonitorService | Phase 5 |
-| 출고 처리 | ReleaseService | Phase 4 |
+| 메뉴 번호 | 메뉴 | 대응 Service | 대응 Phase(PLAN.md) |
+|---|---|---|---|
+| [1] | 시료 관리 | SampleService | Phase 1 |
+| [2] | 시료 주문 | OrderService::reserve | Phase 2 |
+| [3] | 주문 승인/거절 | OrderService::approve/reject, ProductionService | Phase 3 |
+| [4] | 모니터링 | MonitorService | Phase 5 |
+| [5] | 생산라인 조회 | ProductionService, MonitorService | Phase 3 |
+| [6] | 출고 처리 | ReleaseService | Phase 4 |
 | 생산 라인 | ProductionService, MonitorService | Phase 3 |
 
 Dummy 데이터 생성 기능은 제출용 메인 메뉴에는 노출하지 않고, 개발/테스트 편의를 위한 별도 진입점(예: 커맨드라인 인자 `--seed` 또는 개발용 서브메뉴)으로만 제공한다 — DummyDataGenerator PoC의 생성 규칙(랜덤 시료/주문, ID 이어채번)을 `Repository`의 테스트 헬퍼 또는 test Subagent의 TestCase 픽스처 생성에 재사용한다.
