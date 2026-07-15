@@ -1,10 +1,38 @@
 #pragma once
 
+#include <optional>
 #include <string>
 #include <vector>
 
 #include "../Model/Order.h"
+#include "../Model/ProductionQueueEntry.h"
 #include "../Model/Sample.h"
+
+// 생산 라인 조회 화면 전용 표시용 DTO(View 전담, design.md §4.3의 ProductionQueueEntry를
+// 화면에 필요한 부가 정보(시료명, 진행률/완료예정)와 함께 보여주기 위한 것으로 로직은 없다.
+struct ProductionLineActiveView {
+    std::string orderId;
+    std::string sampleName;
+    int requiredQuantity = 0;
+    double totalProductionMinutes = 0.0;
+    double elapsedMinutes = 0.0;
+    std::string estimatedCompletion;  // "HH:MM"
+};
+
+struct ProductionLineWaitingView {
+    int order = 0;  // 대기 순번(1부터)
+    std::string orderId;
+    std::string sampleName;
+    int requiredQuantity = 0;
+};
+
+// 승인/거절 화면에서 사용하는 예약 목록 행(고객/시료명까지 포함해 표시).
+struct ReservedOrderView {
+    std::string orderId;
+    std::string customerName;
+    std::string sampleName;
+    int quantity = 0;
+};
 
 // 콘솔 출력/입력만 전담한다. 로직은 없다(ConsoleMVC PoC 원칙 유지, design.md §3).
 class ConsoleView {
@@ -48,4 +76,18 @@ public:
 
     // 출고 처리 완료 안내(주문번호/출고수량/처리일시/상태)를 출력한다.
     void printReleaseComplete(const Order& order, const std::string& processedAt) const;
+
+    // [3] 주문 승인/거절 화면(docs/screens.md 기준).
+    void printApprovalRejectionMenu() const;
+    void printReservedOrderList(const std::vector<ReservedOrderView>& orders) const;
+    void printApprovalPreview(const std::string& sampleName, int currentStock, int orderQuantity,
+                               int shortfall, int requiredQuantity, double totalProductionMinutes) const;
+    void printApprovalResult(const std::string& orderId, const std::string& fromStatus,
+                              const std::string& toStatus) const;
+    void printRejectionResult(const std::string& orderId) const;
+
+    // [5] 생산라인 조회 화면(docs/screens.md 기준).
+    void printProductionLineMenu() const;
+    void printProductionLineActive(const ProductionLineActiveView& active) const;
+    void printProductionLineWaiting(const std::vector<ProductionLineWaitingView>& waiting) const;
 };
