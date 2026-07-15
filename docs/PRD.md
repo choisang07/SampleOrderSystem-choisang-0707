@@ -1,6 +1,6 @@
 # PRD - 반도체 시료 생산주문관리 시스템 (SampleOrderSystem)
 
-관련 문서: [docs/requirement.md](docs/requirement.md) (상세 기능 명세) · [PLAN.md](PLAN.md) (진행 계획) · [docs/role.md](docs/role.md) (역할 규칙)
+관련 문서: [requirement.md](requirement.md) (상세 기능 명세) · [PLAN.md](PLAN.md) (진행 계획) · [role.md](role.md) (역할 규칙)
 
 ## 1. 개요
 
@@ -49,7 +49,7 @@ requirement.md 5.6절 및 사례1/사례2 기준:
 
 ## 6. 아키텍처 방향
 
-- PoC(미션1) 4가지 산출물(별도 Repository, `poc` Subagent 정의 [.claude/agents/poc.md](.claude/agents/poc.md) 참조) 검증 결과를 반영하여 확정한다. 즉 **PoC 선행 → 아키텍처 확정** 순서.
+- PoC(미션1) 4가지 산출물(별도 Repository, `poc` Subagent 정의 [.claude/agents/poc.md](../.claude/agents/poc.md) 참조) 검증 결과를 반영하여 확정한다. 즉 **PoC 선행 → 아키텍처 확정** 순서.
 - MVC 구조: PoC의 `ConsoleMVC-choisang-0707` 구조를 기반으로 확장.
 - 데이터 영속성: PoC의 `DataPersistence-choisang-0707` 구조를 기반으로 확장. JSON 파일 방식(nlohmann/json 사용)으로 결정.
 - 데이터 모니터링/Dummy 데이터 생성 도구는 PoC 산출물을 참고하여 본 프로젝트의 관리자 도구로 통합.
@@ -58,7 +58,7 @@ requirement.md 5.6절 및 사례1/사례2 기준:
 ## 7. 개발 진행 방식
 
 - Phase 분리 및 Phase별 test → develope → review → develope → test(회귀) 루프: [PLAN.md](PLAN.md) 참조
-- 역할별 책임/권한(실제 Subagent 정의): [docs/role.md](docs/role.md), [.claude/agents/](.claude/agents/)
+- 역할별 책임/권한(실제 Subagent 정의): [role.md](role.md), [.claude/agents/](../.claude/agents/)
 
 ## 8. 품질 기준 (미션2 주안점)
 

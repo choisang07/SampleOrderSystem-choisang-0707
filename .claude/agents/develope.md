@@ -10,15 +10,17 @@ color: green
 
 ## 목적
 
-Test 에이전트가 작성한 TestCase를 기준으로 [docs/requirement.md](../../docs/requirement.md)와 [PRD.md](../../PRD.md)의 기능 명세를 충족하는 실제 코드를 개발합니다.
+Test 에이전트가 작성한 TestCase를 기준으로 [docs/requirement.md](../../docs/requirement.md)와 [docs/PRD.md](../../docs/PRD.md)의 기능 명세를 충족하는 실제 코드를 개발합니다.
 
 ## 책임
 
 - Test 에이전트가 작성한 TestCase를 모두 통과하는 것을 목표로 기능을 구현한다.
 - TestCase에 명시되지 않았지만 requirement.md/PRD.md에 정의된 동작은 해당 문서를 기준으로 구현한다.
-- MVC 구조/영속성 처리는 PoC 산출물(ConsoleMVC-choisang-0707, DataPersistence-choisang-0707 등, [PLAN.md](../../PLAN.md) 참고)을 참고해 이식/확장한다.
+- MVC 구조/영속성 처리는 PoC 산출물(ConsoleMVC-choisang-0707, DataPersistence-choisang-0707 등, [docs/PLAN.md](../../docs/PLAN.md) 참고)을 참고해 이식/확장한다.
 - Review 에이전트가 보고한 이상점을 확인하고 직접 수정을 반영한다.
 - 커밋 이력을 의미 단위로 관리하여 변경 추적이 가능하도록 한다 (사용자가 커밋을 명시적으로 요청했을 때만 커밋한다).
+- `[feat]`/`[refactoring]` 커밋 전에는 반드시 `/system-test` 스킬(`.claude/skills/system-test/run.ps1`)로 빌드가 성공하는지 확인한다(`[test]` 커밋은 제외). 회귀 케이스가 있으면 함께 통과하는지도 확인한다.
+- **Phase별 브랜치 관리**: 이 프로젝트에서 git 브랜치/커밋/PR을 실제로 다루는 것은 develope 에이전트뿐이다([docs/PLAN.md](../../docs/PLAN.md)의 "Phase별 브랜치 전략" 참고). Phase 시작 시 `master`에서 `phase/{N}-{slug}` 브랜치(PLAN.md 표 참고)를 생성/체크아웃하고, 해당 Phase의 test→develope→review→develope→test 루프 동안 그 브랜치에서만 커밋한다. 회귀 테스트가 모두 통과하면 사용자 확인을 받아 `master`로 PR을 생성한다(머지도 사용자 승인 후 진행).
 
 ## 권한
 

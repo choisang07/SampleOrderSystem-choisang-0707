@@ -1,6 +1,6 @@
 # 아키텍처 설계서 (Design) - SampleOrderSystem
 
-관련 문서: [requirement.md](requirement.md) · [PRD.md](../PRD.md) · [PLAN.md](../PLAN.md)
+관련 문서: [requirement.md](requirement.md) · [PRD.md](PRD.md) · [PLAN.md](PLAN.md)
 
 이 문서는 PoC(미션1) 4가지 산출물의 검증 결과를 반영하여, 본 프로젝트(SampleOrderSystem)의 구체적인 아키텍처를 확정하기 위해 작성한다. PRD.md 6장("아키텍처 방향")에서 예고한 "PoC 완료 후 확정"에 해당하는 문서이며, PRD.md 6장은 이 문서가 확정되는 대로 요약 링크로 갱신한다.
 
