@@ -4,12 +4,12 @@
 
 | 역할 | 목적 | Agent 정의 | 도구 권한 |
 |---|---|---|---|
-| Test | 테스트케이스 설계 및 작성 | [.claude/agents/TestCodeDeveloper.md](../.claude/agents/TestCodeDeveloper.md) (Subagent 이름: `TestCodeDeveloper` — `"test"`는 시스템 예약어와 충돌해 사용 불가) | Read, Grep, Glob, Write, Bash, TaskCreate, TaskUpdate (Edit 없음 — 기존 파일 부분 수정 불가, git 포함 셸 작업은 Bash로 가능) |
+| Test | 테스트케이스 설계 및 작성 | [.claude/agents/TestCodeDeveloper.md](../.claude/agents/TestCodeDeveloper.md) (Subagent 이름: `TestCodeDeveloper` — `"test"`는 시스템 예약어와 충돌해 사용 불가) | Read, Grep, Glob, Write, Edit, Bash, TaskCreate, TaskUpdate (프로덕션 코드/PRD/요구사항 문서는 대상에서 제외 — 도구가 아니라 대상 파일 범위로 지키는 제약, git 포함 셸 작업은 Bash로 가능) |
 | PoC | 미션1(PoC) 4가지 사례 코드 검증 | [.claude/agents/poc.md](../.claude/agents/poc.md) | Read, Grep, Glob, Bash, Write, Edit, TaskCreate, TaskUpdate (별도 저장소에서만 작업) |
 | Develope | Test의 TestCase 기반 실제 기능 개발 | [.claude/agents/develope.md](../.claude/agents/develope.md) | Read, Grep, Glob, Bash, Write, Edit, TaskCreate, TaskUpdate |
 | Review | Develope 산출물 리뷰 및 이상점 전달 | [.claude/agents/review.md](../.claude/agents/review.md) | Read, Grep, Glob, ReportFindings (Write/Edit/Bash 없음 — 수정 불가) |
 
-Review는 **도구 자체가 없어서** 코드나 PRD를 수정할 수 없다 (문서상의 약속이 아니라 시스템적으로 강제되는 제약이다). Test는 Edit이 없어 기존 파일을 부분 수정할 수 없지만 Bash 권한이 있어 git 커밋/브랜치 작업은 직접 수행할 수 있다. 발견한 사항 중 프로덕션 코드/PRD 수정이 필요한 부분은 결과 보고를 통해 Develope에게 전달한다.
+Review는 **도구 자체가 없어서** 코드나 PRD를 수정할 수 없다 (문서상의 약속이 아니라 시스템적으로 강제되는 제약이다). Test는 Write/Edit이 모두 있지만 프로덕션 코드/PRD/요구사항 문서는 건드리지 않는다는 대상 범위 제약을 따르며(도구 자체의 제약은 아니다), Bash 권한이 있어 git 커밋/브랜치 작업도 직접 수행할 수 있다. 발견한 사항 중 프로덕션 코드/PRD 수정이 필요한 부분은 결과 보고를 통해 Develope에게 전달한다.
 
 ## 역할별 추가 책임 (최근 갱신)
 

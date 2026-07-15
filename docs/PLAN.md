@@ -72,7 +72,7 @@
 ### Phase별 진행 루프 (TDD)
 
 ```
-Agent(TestCodeDeveloper) : Phase 범위의 TestCase 작성 (Edit 없음 — 기존 파일 부분 수정 불가, Bash로 git 커밋은 가능)
+Agent(TestCodeDeveloper) : Phase 범위의 TestCase 작성 (Write/Edit 모두 가능, 단 프로덕션 코드/PRD는 대상 제외, Bash로 git 커밋 가능)
    │
    ▼
 Agent(develope)  : TestCase 기반 구현 (PoC 산출물을 MVC/영속성 기반으로 참고)

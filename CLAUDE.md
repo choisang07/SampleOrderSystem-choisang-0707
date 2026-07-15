@@ -24,7 +24,7 @@
 
 ### 2. 역할 기반 TDD로 진행한다 (Subagent 기반)
 - 4가지 역할: **test(Subagent 이름: `TestCodeDeveloper`) / poc / develope / review**. 각각 실제 Claude Code Subagent로 정의되어 있다 ([.claude/agents/](.claude/agents/)). `Agent` 도구에서 `subagent_type: "TestCodeDeveloper"`처럼 직접 호출한다 (`"test"`는 시스템 예약어와 충돌해 사용할 수 없다).
-- review Subagent는 Edit/Write(review는 Write도 없음)와 Bash가 없어 **코드나 PRD를 수정할 수 없다** — 시스템적으로 강제되는 제약이다. 발견한 사항은 결과 보고(review는 `ReportFindings`)로 develope에게 전달한다.
+- review Subagent는 Edit/Write(review는 Write도 없음)와 Bash가 없어 **코드나 PRD를 수정할 수 없다** — 시스템적으로 강제되는 제약이다. TestCodeDeveloper는 Write/Edit이 모두 있지만 프로덕션 코드/PRD/요구사항 문서는 건드리지 않는다는 대상 범위 제약을 따른다(도구 부재가 아니라 규칙으로 지키는 제약). 발견한 사항은 결과 보고(review는 `ReportFindings`)로 develope에게 전달한다.
 - Phase별 진행 루프: `test(TestCase 작성) → develope(구현) → review(이상점 보고) → develope(반영) → test(회귀)`. 각 Agent 호출은 이전 대화를 모르므로 self-contained 프롬프트로 호출한다.
 - Phase 구성은 [docs/PLAN.md](docs/PLAN.md)의 Phase 0~5 표를 따른다 (시료 관리 → 주문 접수 → 승인/거절+생산라인 → 출고 → 모니터링 순).
 - 브랜치는 역할별이 아니라 **Phase별**로 나눈다(`phase/{N}-{slug}`). Phase 브랜치 생성/PR은 develope 에이전트가 전담하되, TestCodeDeveloper도 Bash 권한이 있어 테스트 산출물(테스트케이스/테스트 코드) 커밋은 직접 수행할 수 있다. 회귀 통과 후 `master`로 PR을 생성/머지한다. 자세한 내용은 [docs/PLAN.md](docs/PLAN.md)의 "Phase별 브랜치 전략" 참고.
