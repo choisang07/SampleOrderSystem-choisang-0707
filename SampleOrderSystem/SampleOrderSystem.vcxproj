@@ -153,9 +153,16 @@
     <ClCompile Include="Repository\JsonProductionQueueRepository.cpp" />
     <ClCompile Include="Domain\Factory\SampleFactory.cpp" />
     <ClCompile Include="Domain\Factory\OrderFactory.cpp" />
+    <ClCompile Include="Domain\OrderState\IOrderState.cpp" />
+    <ClCompile Include="Domain\OrderState\ReservedState.cpp" />
+    <ClCompile Include="Domain\OrderState\ProducingState.cpp" />
+    <ClCompile Include="Domain\OrderState\ConfirmedState.cpp" />
+    <ClCompile Include="Domain\OrderState\ReleasedState.cpp" />
+    <ClCompile Include="Domain\OrderState\RejectedState.cpp" />
     <ClCompile Include="Service\SampleService.cpp" />
     <ClCompile Include="Service\OrderService.cpp" />
     <ClCompile Include="Service\ReleaseService.cpp" />
+    <ClCompile Include="Service\ProductionService.cpp" />
     <ClCompile Include="Controller\MainController.cpp" />
     <ClCompile Include="View\ConsoleView.cpp" />
     <ClCompile Include="Tests\SampleFactoryTest.cpp" />
@@ -163,6 +170,8 @@
     <ClCompile Include="Tests\OrderFactoryTest.cpp" />
     <ClCompile Include="Tests\OrderServiceTest.cpp" />
     <ClCompile Include="Tests\ReleaseServiceTest.cpp" />
+    <ClCompile Include="Tests\OrderStateTest.cpp" />
+    <ClCompile Include="Tests\ProductionServiceTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vendor\nlohmann\json.hpp" />
@@ -178,13 +187,21 @@
     <ClInclude Include="Repository\JsonProductionQueueRepository.h" />
     <ClInclude Include="Domain\Factory\SampleFactory.h" />
     <ClInclude Include="Domain\Factory\OrderFactory.h" />
+    <ClInclude Include="Domain\OrderState\IOrderState.h" />
+    <ClInclude Include="Domain\OrderState\ReservedState.h" />
+    <ClInclude Include="Domain\OrderState\ProducingState.h" />
+    <ClInclude Include="Domain\OrderState\ConfirmedState.h" />
+    <ClInclude Include="Domain\OrderState\ReleasedState.h" />
+    <ClInclude Include="Domain\OrderState\RejectedState.h" />
     <ClInclude Include="Service\SampleService.h" />
     <ClInclude Include="Service\OrderService.h" />
     <ClInclude Include="Service\ReleaseService.h" />
+    <ClInclude Include="Service\ProductionService.h" />
     <ClInclude Include="Controller\MainController.h" />
     <ClInclude Include="View\ConsoleView.h" />
     <ClInclude Include="Tests\Mocks\MockSampleRepository.h" />
     <ClInclude Include="Tests\Mocks\MockOrderRepository.h" />
+    <ClInclude Include="Tests\Mocks\MockProductionQueueRepository.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

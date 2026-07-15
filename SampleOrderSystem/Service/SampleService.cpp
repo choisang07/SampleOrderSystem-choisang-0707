@@ -48,3 +48,21 @@ std::vector<Sample> SampleService::search(const std::string& keyword) const {
     }
     return result;
 }
+
+std::optional<Sample> SampleService::findById(const std::string& id) const {
+    return repo_.findById(id);
+}
+
+void SampleService::adjustStock(const std::string& id, int delta) {
+    auto sampleOpt = repo_.findById(id);
+    if (!sampleOpt) {
+        throw std::invalid_argument("등록되지 않은 시료입니다: " + id);
+    }
+    Sample sample = *sampleOpt;
+    const int newStock = sample.stock + delta;
+    if (newStock < 0) {
+        throw std::invalid_argument("재고가 부족합니다: " + id);
+    }
+    sample.stock = newStock;
+    repo_.save(sample);
+}
