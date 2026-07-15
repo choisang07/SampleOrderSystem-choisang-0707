@@ -208,3 +208,31 @@ TEST_F(SampleServiceSearchTest, SearchById_ReturnsEmpty_BecauseNameOnly) {
 
     EXPECT_TRUE(service.search("S-001").empty());
 }
+
+// ---- D. 단건 조회 (Phase 2 Review 반영: Controller가 Repository를 직접 참조하지 않도록
+// SampleService에 findById를 추가) ----
+
+// 존재하는 ID를 조회하면 해당 Sample을 반환한다.
+TEST(SampleServiceFindByIdTest, FindById_ReturnsSample_WhenExists) {
+    NiceMock<MockSampleRepository> repo;
+    ON_CALL(repo, findById("S-001"))
+        .WillByDefault(Return(std::optional<Sample>(MakeSample("S-001", "WaferA"))));
+
+    SampleService service(repo);
+    const auto result = service.findById("S-001");
+
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(result->id, "S-001");
+    EXPECT_EQ(result->name, "WaferA");
+}
+
+// 존재하지 않는 ID를 조회하면 std::nullopt를 반환한다.
+TEST(SampleServiceFindByIdTest, FindById_ReturnsNullopt_WhenNotExists) {
+    NiceMock<MockSampleRepository> repo;
+    ON_CALL(repo, findById("S-999")).WillByDefault(Return(std::nullopt));
+
+    SampleService service(repo);
+    const auto result = service.findById("S-999");
+
+    EXPECT_FALSE(result.has_value());
+}

@@ -184,7 +184,8 @@ void MainController::handleOrder() {
         return;
     }
 
-    const auto sampleOpt = sampleRepo_.findById(sampleId);
+    SampleService sampleService(sampleRepo_);
+    const auto sampleOpt = sampleService.findById(sampleId);
     if (!sampleOpt.has_value()) {
         view_.printMessage("등록되지 않은 시료입니다.");
         return;

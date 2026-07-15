@@ -30,6 +30,10 @@ std::vector<Sample> SampleService::listAll() const {
     return repo_.findAll();
 }
 
+std::optional<Sample> SampleService::findById(const std::string& id) const {
+    return repo_.findById(id);
+}
+
 std::vector<Sample> SampleService::search(const std::string& keyword) const {
     if (keyword.empty() || SampleFactory::isBlank(keyword)) {
         throw std::invalid_argument("검색어를 입력하세요.");
