@@ -1,5 +1,6 @@
 #include "ConsoleView.h"
 
+#include <iomanip>
 #include <iostream>
 
 void ConsoleView::printMainMenu() const {
@@ -35,4 +36,29 @@ std::string ConsoleView::promptCommand() const {
 
 bool ConsoleView::isInputAlive() const {
     return static_cast<bool>(std::cin);
+}
+
+void ConsoleView::printSampleManagementMenu() const {
+    std::cout << "__________________________________________________\n";
+    std::cout << "[1] 시료 관리\n";
+    std::cout << "__________________________________________________\n";
+    std::cout << "[1] 시료 등록    [2] 시료 목록    [3] 시료 검색    [0] 뒤로\n";
+    std::cout << "선택 > ";
+}
+
+std::string ConsoleView::promptLine(const std::string& prompt) const {
+    std::cout << prompt;
+    std::string input;
+    std::getline(std::cin, input);
+    return input;
+}
+
+void ConsoleView::printSampleList(const std::vector<Sample>& samples) const {
+    std::cout << "등록 시료 목록 (총 " << samples.size() << " 종)\n";
+    std::cout << "ID\t시료명\t평균 생산시간\t수율\t현재 재고\n";
+    for (const auto& sample : samples) {
+        std::cout << sample.id << "\t" << sample.name << "\t"
+                   << sample.avgProductionTime << "\t" << sample.yield << "\t"
+                   << sample.stock << "\n";
+    }
 }

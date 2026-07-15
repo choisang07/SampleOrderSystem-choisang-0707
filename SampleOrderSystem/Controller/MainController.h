@@ -3,6 +3,7 @@
 #include "../Repository/IOrderRepository.h"
 #include "../Repository/IProductionQueueRepository.h"
 #include "../Repository/ISampleRepository.h"
+#include "../Service/SampleService.h"
 #include "../View/ConsoleView.h"
 
 // 메인 메뉴 라우팅 담당(design.md §3, §7). Phase 0에서는 메뉴 뼈대만 있고,
@@ -23,6 +24,9 @@ public:
 
 private:
     void handleSampleManagement();
+    void handleSampleRegistration(SampleService& service);
+    void handleSampleList(SampleService& service);
+    void handleSampleSearch(SampleService& service);
     void handleOrder();
     void handleMonitoring();
     void handleRelease();
